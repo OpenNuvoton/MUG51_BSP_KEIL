@@ -1,9 +1,0 @@
-".\Output\Capture_reg.obj",
-".\Output\common.obj",
-".\Output\capture.obj",
-".\Output\uart.obj",
-".\Output\STARTUP.obj" 
-TO ".\Output\Capture" 
-
-PRINT(".\LST\Capture.map") DISABLEWARNING (16) 
-REMOVEUNUSED 
