@@ -1,0 +1,308 @@
+C51 COMPILER V9.52.0.0   ISP_SPI0                                                          05/07/2021 15:19:22 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE ISP_SPI0
+OBJECT MODULE PLACED IN .\Output\isp_spi0.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\isp_spi0.c LARGE OMF2 OPTIMIZE(4,SPEED) BROWSE INCDIR(..\..\..\..\Librar
+                    -y\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\LST\isp_spi0.lst) TABS(2) OBJECT(.\Output\isp_spi0.obj
+                    -)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  File Function: MUG51 UART0 ISP subroutine
+   9          //********************************************************************************************************
+             -***
+  10          #include "MUG51.h"
+  11          #include "isp_spi0.h"
+  12          
+  13          xdata volatile uint8_t rxbuf[64];
+  14          xdata volatile uint8_t rxcgbuf[56];
+  15          xdata volatile uint8_t txbuf[64];
+  16          data volatile uint8_t bufhead;
+  17          data volatile uint16_t flash_address;
+  18          data volatile uint16_t AP_size;
+  19          data volatile uint8_t g_timer1Counter;
+  20          data volatile uint8_t count;
+  21          data volatile uint16_t g_timer0Counter;
+  22          data volatile uint32_t g_checksum;
+  23          data volatile uint32_t g_totalchecksum;
+  24          bit volatile bSPIDataReady;
+  25          bit volatile bSPISendFlag = 0;
+  26          bit volatile g_timer0Over;
+  27          bit volatile g_timer1Over;
+  28          bit volatile g_programflag;
+  29          bit  BIT_TMP;
+  30          unsigned char PID_highB, PID_lowB, DID_highB, DID_lowB, CONF0, CONF1, CONF2, CONF4;
+  31          unsigned char recv_CONF0, recv_CONF1, recv_CONF2, recv_CONF4;
+  32          
+  33          void READ_ID(void)
+  34          {
+  35   1      //    set_CHPCON_IAPEN;
+  36   1          IAPCN = READ_DID;
+  37   1          IAPAH = 0x00;
+  38   1          IAPAL = 0x00;
+  39   1          set_IAPTRG_IAPGO;
+  40   1          DID_lowB = IAPFD;
+  41   1          IAPAL = 0x01;
+  42   1          set_IAPTRG_IAPGO;
+  43   1          DID_highB = IAPFD;
+  44   1          IAPAL = 0x02;
+  45   1          set_IAPTRG_IAPGO;
+  46   1          PID_lowB = IAPFD;
+C51 COMPILER V9.52.0.0   ISP_SPI0                                                          05/07/2021 15:19:22 PAGE 2   
+
+  47   1          IAPAL = 0x03;
+  48   1          set_IAPTRG_IAPGO;
+  49   1          PID_highB = IAPFD;
+  50   1      }
+  51          void READ_CONFIG(void)
+  52          {
+  53   1          IAPCN = BYTE_READ_CONFIG;
+  54   1          IAPAL = 0x00;
+  55   1          IAPAH = 0x00;
+  56   1          set_IAPTRG_IAPGO;
+  57   1          CONF0 = IAPFD;
+  58   1          IAPAL = 0x01;
+  59   1          set_IAPTRG_IAPGO;
+  60   1          CONF1 = IAPFD;
+  61   1          IAPAL = 0x02;
+  62   1          set_IAPTRG_IAPGO;
+  63   1          CONF2 = IAPFD;
+  64   1          IAPAL = 0x04;
+  65   1          set_IAPTRG_IAPGO;
+  66   1          CONF4 = IAPFD;
+  67   1      //    clr_CHPCON_IAPEN;
+  68   1      }
+  69          
+  70          void TM0_ini(void)
+  71          {
+  72   1          TH0 = TL0 = 0;     //interrupt timer 140us
+  73   1          set_TCON_TR0;      //Start timer0
+  74   1          set_IPH_PSH;       // Serial port 0 interrupt level2
+  75   1          set_IE_ET0;
+  76   1      }
+  77          
+  78          
+  79          void SPI0_ini(void)
+  80          {
+  81   1          MFP_P00_SPI0_MOSI;      /*define  SPI0 MOSI pin */
+  82   1          P00_QUASI_MODE;
+  83   1          MFP_P01_SPI0_MISO;      /*define  SPI0 MISO pin */
+  84   1          P01_QUASI_MODE;
+  85   1          MFP_P02_SPI0_CLK;       /*define  SPI0 CLK pin */
+  86   1          P02_QUASI_MODE;
+  87   1          MFP_P03_SPI0_SS;        /*define  SPI0 SS pin as normal GPIO*/
+  88   1          P03_QUASI_MODE;
+  89   1      
+  90   1          clr_SPI0CR0_MSTR;                                   // SPI in Slave mode 
+  91   1          clr_SPI0CR0_LSBFE;                                  // MSB first 
+  92   1      
+  93   1          set_SPI0CR0_CPOL;                                   // The SPI clock is low in idle mode
+  94   1          set_SPI0CR0_CPHA;  
+  95   1      
+  96   1          set_SPI0CR0_SPIEN;
+  97   1          clr_SPI0SR_SPIF;                          // Clear SPI flag   
+  98   1      }
+  99          
+ 100          void Package_checksum(void)
+ 101          {
+ 102   1          g_checksum = 0;
+ 103   1      
+ 104   1          for (count = 3; count < 64; count++)
+ 105   1          {
+ 106   2              g_checksum = g_checksum + rxbuf[count];
+ 107   2      
+ 108   2          }
+C51 COMPILER V9.52.0.0   ISP_SPI0                                                          05/07/2021 15:19:22 PAGE 3   
+
+ 109   1          txbuf[6] = g_checksum & 0xff;
+ 110   1          txbuf[7] = (g_checksum >> 8) & 0xff;
+ 111   1          txbuf[10] = rxbuf[4+3] + 1;
+ 112   1          txbuf[11] = rxbuf[5+3];  
+ 113   1          if (txbuf[4+6] == 0x00)
+ 114   1              txbuf[5+6]++;    
+ 115   1      }
+ 116          void Package_checksum2(void)
+ 117          {
+ 118   1          g_checksum = 0;
+ 119   1      
+ 120   1          for (count = 3; count < 64; count++)
+ 121   1          {
+ 122   2              g_checksum = g_checksum + rxbuf[count];
+ 123   2              txbuf[count] = 0x00;
+ 124   2          }
+ 125   1            txbuf[6] = (g_checksum >> 8) & 0xff;
+ 126   1            txbuf[7] = g_checksum & 0xff;    
+ 127   1            txbuf[11] = rxbuf[4+3] + 1;    
+ 128   1      }
+ 129          
+ 130          
+ 131          void Send_64byte_To_SPI0(void)
+ 132          {
+ 133   1      _push_(SFRS);
+ 134   1          SFRS = 0;
+ 135   1            clr_SPI0CR0_CPOL;                                   // The SPI clock is low in idle mode
+ 136   1            clr_SPI0CR0_CPHA;    
+ 137   1      
+ 138   1          bSPISendFlag = 1;
+ 139   1      
+ 140   1          for (count = 0; count < 64; count++)
+ 141   1          {              
+ 142   2              SPI0DR = txbuf[count];
+ 143   2              while(!(SPI0SR&0x80));
+ 144   2              clr_SPI0SR_SPIF;            
+ 145   2          }
+ 146   1          set_SPI0CR0_CPOL;                                   // The SPI clock is low in idle mode
+ 147   1          set_SPI0CR0_CPHA;    
+ 148   1          bSPISendFlag = 0;
+ 149   1      _pop_(SFRS);
+ 150   1      }
+ 151          
+ 152          void SPI0_Polling_Receive_Data(void)
+ 153          {
+ 154   1      _push_(SFRS);
+ 155   1      
+ 156   1        if(bSPISendFlag == 0) 
+ 157   1        {
+ 158   2            SFRS = 0;
+ 159   2      
+ 160   2            while(!(SPI0SR&0x80));
+ 161   2            clr_SPI0SR_SPIF;      
+ 162   2      
+ 163   2            rxbuf[bufhead] = SPI0DR;
+ 164   2          
+ 165   2            if(rxbuf[0] == 0x53)
+ 166   2            {
+ 167   3                //  txbuf[bufhead] = 0x00;  
+ 168   3                  bufhead++;  
+ 169   3                  if(bufhead == 64)
+ 170   3                  {      
+C51 COMPILER V9.52.0.0   ISP_SPI0                                                          05/07/2021 15:19:22 PAGE 4   
+
+ 171   4                    bSPIDataReady = TRUE;
+ 172   4      
+ 173   4                    g_timer1Counter=0;
+ 174   4                    g_timer1Over=0;
+ 175   4                    bufhead = 0;      
+ 176   4                  }          
+ 177   3            }
+ 178   2            if(bufhead == 1)
+ 179   2            {
+ 180   3                  g_timer1Over=0;
+ 181   3                  g_timer1Counter=90; 
+ 182   3            }  
+ 183   2        }
+ 184   1      
+ 185   1      _pop_(SFRS);
+ 186   1      }
+ 187          void SPI0_Polling_Receive_Data1(void)
+ 188          {
+ 189   1          _push_(SFRS);
+ 190   1        if(bSPISendFlag == 0) 
+ 191   1        {
+ 192   2      
+ 193   2          SFRS = 0;  
+ 194   2          SPI0SR &=0x8F;
+ 195   2              while(!(SPI0SR&0x80));
+ 196   2                      rxbuf[bufhead] = SPI0DR;
+ 197   2              clr_SPI0SR_SPIF;
+ 198   2              if(rxbuf[0] == 0x53)
+ 199   2              {
+ 200   3                  //  txbuf[bufhead] = 0x00;  
+ 201   3                    bufhead++;  
+ 202   3                    if(bufhead == 64)
+ 203   3                    {      
+ 204   4      
+ 205   4                      bSPIDataReady = TRUE;
+ 206   4      
+ 207   4                      g_timer1Counter=0;
+ 208   4                      g_timer1Over=0;
+ 209   4                      bufhead = 0;
+ 210   4                    }
+ 211   3                  }
+ 212   2        }
+ 213   1      _pop_(SFRS);
+ 214   1      }
+ 215          
+ 216          void WordChangeByte12(void)
+ 217          {
+ 218   1        unsigned char ct,ct1,ct2;
+ 219   1        for (ct=0;ct<12;ct++)
+ 220   1        {
+ 221   2          ct1 = ct*4;
+ 222   2          ct2 = (ct+4)*4;
+ 223   2          rxcgbuf[ct1]=rxbuf[ct2+3];
+ 224   2          rxcgbuf[ct1+1]=rxbuf[ct2+2];
+ 225   2          rxcgbuf[ct1+2]=rxbuf[ct2+1];
+ 226   2          rxcgbuf[ct1+3]=rxbuf[ct2];
+ 227   2        }
+ 228   1      }
+ 229          
+ 230          void WordChangeByte14(void)
+ 231          {
+ 232   1        unsigned char ct,ct1,ct2;
+C51 COMPILER V9.52.0.0   ISP_SPI0                                                          05/07/2021 15:19:22 PAGE 5   
+
+ 233   1        for (ct=0;ct<14;ct++)
+ 234   1        {
+ 235   2          ct1 = ct*4;
+ 236   2          ct2 = (ct+2)*4;
+ 237   2          rxcgbuf[ct1]=rxbuf[ct2+3];
+ 238   2          rxcgbuf[ct1+1]=rxbuf[ct2+2];
+ 239   2          rxcgbuf[ct1+2]=rxbuf[ct2+1];
+ 240   2          rxcgbuf[ct1+3]=rxbuf[ct2];
+ 241   2        }
+ 242   1      }
+ 243          void Timer0_ISR(void) interrupt 1
+ 244          {
+ 245   1            _push_(SFRS);
+ 246   1        SFRS = 0;    
+ 247   1          if (!g_timer0Over)
+ 248   1          {
+ 249   2              g_timer0Counter--;
+ 250   2              if (!g_timer0Counter)
+ 251   2              {
+ 252   3                  g_timer0Over = 1;
+ 253   3              }
+ 254   2          }
+ 255   1          if (g_timer1Counter)
+ 256   1          {
+ 257   2              g_timer1Counter--;
+ 258   2              if (!g_timer1Counter)
+ 259   2              {
+ 260   3                  g_timer1Over = 1;
+ 261   3              }
+ 262   2          }
+ 263   1        _pop_(SFRS);  
+ 264   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1094    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    196    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     17    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      6    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

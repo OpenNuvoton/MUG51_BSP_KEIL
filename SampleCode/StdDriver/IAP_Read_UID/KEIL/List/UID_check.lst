@@ -1,0 +1,91 @@
+C51 COMPILER V9.52.0.0   UID_CHECK                                                         05/07/2021 15:15:34 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE UID_CHECK
+OBJECT MODULE PLACED IN .\Output\UID_check.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\UID_check.C LARGE OMF2 BROWSE INCDIR(..\..\Common;..\..\..\..\Library\De
+                    -vice\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\List\UID_check.lst) TABS(2) OBJECT(.\Output\UID_check.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          //********************************************************************************************************
+             -***
+   8          //  Website: http://www.nuvoton.com
+   9          //  E-Mail : MicroC-8bit@nuvoton.com
+  10          //  Date   : Apr/29/2021 
+  11          //********************************************************************************************************
+             -***
+  12          
+  13          //********************************************************************************************************
+             -***
+  14          //  File Function: MUG51 Read UID demo code
+  15          //********************************************************************************************************
+             -***
+  16          #include "MUG51.h"
+  17          
+  18          /* For printf code only. Disable this define to reduce code size. */
+  19          #define print_function 
+  20          
+  21          /**********************************/
+  22          /* *only read one byte of UID    */
+  23          /*********************************/ 
+  24          
+  25          void main(void)
+  26          {
+  27   1        unsigned char READ;
+  28   1      
+  29   1      #ifdef print_function  
+  30   1      /* Initial UART0 for printf */
+  31   1          MFP_P31_UART0_TXD;
+  32   1          P31_PUSHPULL_MODE;
+  33   1          UART_Open(8000000,UART0_Timer3,38400);
+  34   1          ENABLE_UART0_PRINTF;
+  35   1      #endif  
+  36   1       
+  37   1        UID_Read();
+  38   1      #ifdef print_function
+  39   1        /*printf must in SFR page 0 */
+  40   1        _push_(SFRS);
+  41   1        SFRS = 0;   
+  42   1        printf ("\n UID = ");
+  43   1        for(READ=0;READ<12;READ++)
+  44   1        {
+  45   2          printf (" 0x%bx",UIDBuffer[READ]);
+C51 COMPILER V9.52.0.0   UID_CHECK                                                         05/07/2021 15:15:34 PAGE 2   
+
+  46   2        }
+  47   1        _pop_(SFRS);
+  48   1      #endif    
+  49   1        while(1);
+  50   1      
+  51   1      
+  52   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    116    ----
+   CONSTANT SIZE    =     16    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

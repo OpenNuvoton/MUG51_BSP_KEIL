@@ -1,0 +1,383 @@
+C51 COMPILER V9.52.0.0   ISP_SPI0_MAIN                                                     05/07/2021 15:19:22 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE ISP_SPI0_MAIN
+OBJECT MODULE PLACED IN .\Output\ISP_SPI0_main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\ISP_SPI0_main.c LARGE OMF2 OPTIMIZE(4,SPEED) BROWSE INCDIR(..\..\..\..\L
+                    -ibrary\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\LST\ISP_SPI0_main.lst) TABS(2) OBJECT(.\Output\IS
+                    -P_SPI0_main.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          
+   8          //********************************************************************************************************
+             -***
+   9          //  File Function: MUG51 UART0 ISP demo code
+  10          //********************************************************************************************************
+             -***
+  11          #include "MUG51.h"
+  12          #include "isp_spi0.h"
+  13          
+  14          //#define  isp_with_wdt
+  15          unsigned int xdata start_address,u16_addr;
+  16          
+  17          /*********************************************************************************************************
+             -***
+  18          *    Main function 
+  19          **********************************************************************************************************
+             -**/
+  20          void main (void)
+  21          {
+  22   1      
+  23   1        set_CHPCON_IAPEN;  
+  24   1        TA=0X55;TA=0XAA;WDCON=0x07;
+  25   1      //SPI0 initial for ISP programmer GUI
+  26   1        SPI0_ini();
+  27   1        TM0_ini();
+  28   1        g_timer0Over=0;
+  29   1        g_timer0Counter=Timer0Out_Counter;
+  30   1        g_programflag=0;
+  31   1        P32_QUASI_MODE;P32 = 0;
+  32   1        P33_QUASI_MODE;P33 = 0;  
+  33   1        bSPISendFlag = FALSE;
+  34   1        bufhead = 0;
+  35   1      
+  36   1      while(1)
+  37   1      {
+  38   2              
+  39   2              SPI0_Polling_Receive_Data();
+  40   2              if(bSPIDataReady == TRUE)
+  41   2              {
+  42   3                EA=0; //DISABLE ALL INTERRUPT
+  43   3      
+  44   3                if(g_programflag==1)
+C51 COMPILER V9.52.0.0   ISP_SPI0_MAIN                                                     05/07/2021 15:19:22 PAGE 2   
+
+  45   3                {
+  46   4                  while(1)
+  47   4                  {
+  48   5      APPRO:    //   _delay_();       
+  49   5                    SPI0_Polling_Receive_Data1();
+  50   5                    if(bSPIDataReady == TRUE)
+  51   5                    {
+  52   6                       EA=0;
+  53   6                       WordChangeByte14();
+  54   6                        for(count=0;count<56;count++)
+  55   6                        {
+  56   7      
+  57   7                          g_timer0Counter=Timer0Out_Counter;
+  58   7      
+  59   7                          IAPCN = BYTE_PROGRAM_AP;          //program byte
+  60   7                          IAPAL = flash_address&0xff;
+  61   7                          IAPAH = (flash_address>>8)&0xff;
+  62   7                          IAPFD=rxcgbuf[count];
+  63   7      
+  64   7            #ifdef isp_with_wdt
+                                  set_IAPTRG_IAPGO_WDCLR;
+                    #else
+  67   7                          set_IAPTRG_IAPGO;
+  68   7            #endif
+  69   7                      
+  70   7                          IAPCN = BYTE_READ_AP;              //program byte verify
+  71   7                          if(IAPFD!=rxcgbuf[count])
+  72   7                          while(1);               
+  73   7                          if (CHPCON==0x43)              //if error flag set, program error stop ISP
+  74   7                          while(1);
+  75   7                          
+  76   7                         // g_totalchecksum=g_totalchecksum+rxbuf[count];
+  77   7                          flash_address++;
+  78   7             
+  79   7                          if(flash_address==AP_size)
+  80   7                          {
+  81   8                             g_programflag=0;
+  82   8                             g_timer0Over =1;
+  83   8                             goto END_2;
+  84   8                          }
+  85   7                        
+  86   7                        } 
+  87   6                      
+  88   6            END_2:        
+  89   6                          Package_checksum2();
+  90   6                          Send_64byte_To_SPI0();
+  91   6                          bSPIDataReady = FALSE;
+  92   6                          bufhead = 0;
+  93   6      //                    EA=1;    
+  94   6                    }
+  95   5               }
+  96   4              }
+  97   3                switch(rxbuf[3])
+  98   3                {                
+  99   4                  case CMD_CONNECT:
+ 100   4                  case CMD_SYNC_PACKNO:
+ 101   4                  {
+ 102   5                    Package_checksum();
+ 103   5                    Send_64byte_To_SPI0();    
+ 104   5                    g_timer0Counter=0; //clear timer 0 for no reset
+ 105   5                    g_timer0Over=0;
+ 106   5                  break;
+C51 COMPILER V9.52.0.0   ISP_SPI0_MAIN                                                     05/07/2021 15:19:22 PAGE 3   
+
+ 107   5                  }
+ 108   4      
+ 109   4                  case CMD_GET_FWVER:
+ 110   4                  {
+ 111   5                    Package_checksum();
+ 112   5                    txbuf[14]=FW_VERSION;  
+ 113   5                    Send_64byte_To_SPI0();  
+ 114   5                  break;
+ 115   5                  }
+ 116   4                  
+ 117   4                  case CMD_RUN_APROM:
+ 118   4                  {
+ 119   5                    goto _APROM;
+ 120   5                  break;
+ 121   5                  }
+ 122   4      
+ 123   4                  //please for ISP programmer GUI, ID always use following rule to transmit.
+ 124   4                  case CMD_GET_DEVICEID:
+ 125   4                  {
+ 126   5                    READ_ID();
+ 127   5                    Package_checksum();
+ 128   5                    txbuf[14]=DID_lowB;  
+ 129   5                    txbuf[13]=DID_highB;  
+ 130   5                    txbuf[12]=PID_lowB;  
+ 131   5                    txbuf[11]=PID_highB;  
+ 132   5      
+ 133   5                    Send_64byte_To_SPI0();  
+ 134   5                  break;
+ 135   5                  }
+ 136   4                  case CMD_ERASE_ALL:
+ 137   4                  {
+ 138   5      //              set_CHPCON_IAPEN;
+ 139   5                    set_IAPUEN_APUEN;
+ 140   5                    IAPFD = 0xFF;          //Erase must set IAPFD = 0xFF
+ 141   5                    IAPCN = PAGE_ERASE_AP;
+ 142   5                    for(flash_address=0x0000;flash_address<APROM_SIZE/PAGE_SIZE;flash_address++)
+ 143   5                    {        
+ 144   6                      IAPAL = LOBYTE(flash_address*PAGE_SIZE);
+ 145   6                      IAPAH = HIBYTE(flash_address*PAGE_SIZE);
+ 146   6      #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 149   6                    set_IAPTRG_IAPGO;
+ 150   6      #endif
+ 151   6                    }
+ 152   5                    Package_checksum();
+ 153   5                    Send_64byte_To_SPI0();  
+ 154   5                    break;
+ 155   5                  }
+ 156   4                  case CMD_READ_CONFIG:
+ 157   4                  {
+ 158   5                    READ_CONFIG();
+ 159   5                    Package_checksum();
+ 160   5                    txbuf[14]=CONF0;
+ 161   5                    txbuf[13]=CONF1;
+ 162   5                    txbuf[12]=CONF2;
+ 163   5                    txbuf[11]=0xff;
+ 164   5                    txbuf[18]=CONF4;
+ 165   5                    txbuf[17]=0xff;
+ 166   5                    txbuf[16]=0xff;
+ 167   5                    txbuf[15]=0xff;
+ 168   5                    
+C51 COMPILER V9.52.0.0   ISP_SPI0_MAIN                                                     05/07/2021 15:19:22 PAGE 4   
+
+ 169   5                  
+ 170   5                    Send_64byte_To_SPI0();
+ 171   5                  break;
+ 172   5                  }
+ 173   4                  
+ 174   4                  case CMD_UPDATE_CONFIG:
+ 175   4                  {
+ 176   5                    recv_CONF0 = rxbuf[14];
+ 177   5                    recv_CONF1 = rxbuf[13];
+ 178   5                    recv_CONF2 = rxbuf[12];
+ 179   5                    recv_CONF4 = rxbuf[11];
+ 180   5      /*Erase CONFIG */              
+ 181   5      //              set_CHPCON_IAPEN;
+ 182   5                    set_IAPUEN_CFUEN;
+ 183   5                    IAPCN = PAGE_ERASE_CONFIG;
+ 184   5                    IAPAL = 0x00;
+ 185   5                    IAPAH = 0x00;
+ 186   5                    IAPFD = 0xFF;
+ 187   5      #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 190   5                    set_IAPTRG_IAPGO;
+ 191   5      #endif
+ 192   5      /*Program CONFIG*/  
+ 193   5                    IAPCN = BYTE_PROGRAM_CONFIG;
+ 194   5                    IAPAL = 0x00;
+ 195   5                    IAPAH = 0x00;
+ 196   5                    IAPFD = recv_CONF0;
+ 197   5      #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 200   5                    set_IAPTRG_IAPGO;
+ 201   5      #endif
+ 202   5                    IAPFD = recv_CONF1;
+ 203   5                    IAPAL = 0x01;
+ 204   5      #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 207   5                    set_IAPTRG_IAPGO;
+ 208   5      #endif
+ 209   5                    IAPAL = 0x02;
+ 210   5                    IAPFD = recv_CONF2;
+ 211   5        #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 214   5                    set_IAPTRG_IAPGO;
+ 215   5      #endif
+ 216   5                    IAPAL = 0x04;
+ 217   5                    IAPFD = recv_CONF4;
+ 218   5      #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 221   5                    set_IAPTRG_IAPGO;
+ 222   5      #endif
+ 223   5                    clr_IAPUEN_CFUEN;
+ 224   5      /*Read new CONFIG*/  
+ 225   5                    READ_CONFIG();
+ 226   5                    Package_checksum();
+ 227   5                    txbuf[14]=CONF0;
+ 228   5                    txbuf[13]=CONF1;
+ 229   5                    txbuf[12]=CONF2;
+ 230   5                    txbuf[11]=0xff;
+C51 COMPILER V9.52.0.0   ISP_SPI0_MAIN                                                     05/07/2021 15:19:22 PAGE 5   
+
+ 231   5                    txbuf[18]=CONF4;
+ 232   5                    txbuf[17]=0xff;
+ 233   5                    txbuf[16]=0xff;
+ 234   5                    txbuf[15]=0xff;
+ 235   5                    Send_64byte_To_SPI0();
+ 236   5                    break;
+ 237   5                  }
+ 238   4                  
+ 239   4                  case CMD_UPDATE_APROM:
+ 240   4                  {
+ 241   5      
+ 242   5                    g_timer0Counter=Timer0Out_Counter;
+ 243   5                    set_IAPUEN_APUEN;
+ 244   5                    IAPFD = 0xFF;          //Erase must set IAPFD = 0xFF
+ 245   5                    IAPCN = PAGE_ERASE_AP;
+ 246   5                    
+ 247   5                    start_address = 0;
+ 248   5                    
+ 249   5                    AP_size = 0;
+ 250   5                    AP_size = rxbuf[15];
+ 251   5                    AP_size |= ((rxbuf[14]<<8)&0xFF00);
+ 252   5      
+ 253   5                    u16_addr = start_address + AP_size;
+ 254   5                    flash_address = (start_address&0xFF00);
+ 255   5      
+ 256   5                    while(flash_address< u16_addr)
+ 257   5                    {
+ 258   6                      IAPAL = LOBYTE(flash_address);
+ 259   6                      IAPAH = HIBYTE(flash_address);
+ 260   6      #ifdef isp_with_wdt
+                              set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 263   6                      set_IAPTRG_IAPGO;
+ 264   6      #endif
+ 265   6                      flash_address += PAGE_SIZE;
+ 266   6                    }
+ 267   5                    
+ 268   5                    g_totalchecksum = 0;
+ 269   5                    flash_address = 0;//start_address;
+ 270   5                    g_programflag = 1;
+ 271   5                    WordChangeByte12();
+ 272   5                    for(count=0;count<48;count++)
+ 273   5                    {
+ 274   6                      IAPCN = BYTE_PROGRAM_AP;
+ 275   6                      IAPAL = flash_address&0xff;
+ 276   6                      IAPAH = (flash_address>>8)&0xff;
+ 277   6                      IAPFD = rxcgbuf[count];
+ 278   6      #ifdef isp_with_wdt
+                            set_IAPTRG_IAPGO_WDCLR;
+              #else
+ 281   6                    set_IAPTRG_IAPGO;
+ 282   6      #endif
+ 283   6                      IAPCN = BYTE_READ_AP;                //program byte verify
+ 284   6                      set_IAPTRG_IAPGO;
+ 285   6      
+ 286   6                      if(IAPFD!=rxcgbuf[count])
+ 287   6                      while(1);  
+ 288   6      
+ 289   6                      if (CHPCON==0x43)                //if error flag set, program error stop ISP
+ 290   6                      while(1);
+ 291   6          
+ 292   6                     // g_totalchecksum=g_totalchecksum+rxbuf[count];
+C51 COMPILER V9.52.0.0   ISP_SPI0_MAIN                                                     05/07/2021 15:19:22 PAGE 6   
+
+ 293   6                      flash_address++;
+ 294   6      
+ 295   6                      if(flash_address==AP_size)
+ 296   6                      {
+ 297   7                          g_programflag=0;
+ 298   7                         goto END_1;
+ 299   7                      }
+ 300   6                    }
+ 301   5      END_1:             
+ 302   5                    Package_checksum2();
+ 303   5                    Send_64byte_To_SPI0();
+ 304   5                    bSPIDataReady = FALSE;
+ 305   5                    bufhead = 0;
+ 306   5      //          EA=1;                
+ 307   5                    goto APPRO;
+ 308   5                    break;
+ 309   5                  }
+ 310   4                }  
+ 311   3                bSPIDataReady = FALSE;
+ 312   3                bufhead = 0;
+ 313   3           //     EA=1;      
+ 314   3            }
+ 315   2            /*For connect timer out     */
+ 316   2            if(g_timer0Over==1)
+ 317   2            {
+ 318   3             goto _APROM;
+ 319   3            }
+ 320   2      }   
+ 321   1      
+ 322   1      _APROM:
+ 323   1          clr_CHPCON_IAPEN;
+ 324   1          TA = 0xAA;
+ 325   1          TA = 0x55;
+ 326   1          CHPCON &= 0xFD;                  //set boot from AP
+ 327   1          TA = 0xAA;
+ 328   1          TA = 0x55;
+ 329   1          CHPCON |= 0x80;                   //software reset enable
+ 330   1      
+ 331   1          /* Trap the CPU */
+ 332   1          while(1);  
+ 333   1      }
+ 334          
+ 335          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1196    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      4    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

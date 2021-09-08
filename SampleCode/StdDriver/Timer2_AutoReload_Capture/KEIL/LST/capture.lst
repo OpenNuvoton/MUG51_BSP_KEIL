@@ -1,0 +1,123 @@
+C51 COMPILER V9.60.0.0   CAPTURE                                                           05/11/2021 11:48:26 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE CAPTURE
+OBJECT MODULE PLACED IN .\Output\capture.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\..\..\Library\StdDriver\src\capture.c LARGE OMF2 OPTIMIZE(8,SPEED)
+                    - BROWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\LST\capture.lst) TABS
+                    -(2) OBJECT(.\Output\capture.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   4          /*                                                                                                        
+             - */
+   5          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   6          
+   7          
+   8          #include "MUG51.h"
+   9          
+  10          /**
+  11           * @brief       Timer 2 capture setting 
+  12           * @param       u8CAPChannel input capture Channel select (IC0/IC1/IC2)
+  13           * @param       u8CAPSource input capture each Channel source select (IC_GPIO/ACMP0_O/ACMP1_O) 
+  14           * @param       u8CAPLevel input level select  (CaptureFalling/CaptureRising/CaptureEither)
+  15           * @param       u8TM2DIV reload counter divider select(0~7 = DIV 1/4/16/32/64/128/256/512.) 
+  16           * @return      none
+  17           * @details     none
+  18           * @example     TIMER2_Capture(IC0,IC_GPIO,CaptureRising,7);
+  19           */
+  20          void TIMER2_Capture(unsigned char u8CAPChannel, unsigned char u8CAPSource, unsigned char u8CAPLevel, unsig
+             -ned char u8TM2DIV)
+  21          {
+  22   1          SFRS = 0;
+  23   1          T2MOD&=0x0F;
+  24   1          T2MOD|=(u8TM2DIV<<4);     /*For reload counter divider select */
+  25   1          T2MOD|=0x80;              /*Enable auto-reload and auto clear */
+  26   1          switch (u8CAPChannel)
+  27   1          {
+  28   2              case IC0:
+  29   2                SFRS=3;T2ACMP&=0xFC;T2ACMP|=u8CAPSource;  /* Capture source select */
+  30   2                SFRS=1;CAPCON1&=0xFC;CAPCON1|=u8CAPLevel; /* Capture trig level select */ 
+  31   2                set_CAPCON2_ENF0;                         /* enable noise filer */
+  32   2                set_CAPCON0_CAPEN0;                       /* Input capture 0 enable*/
+  33   2                SFRS=0;T2MOD&=0xFC;T2MOD|=0x01;           /* Set reload */
+  34   2                SFRS=1;C0H=0; C0L=0;                      /* Clear counter */
+  35   2              break;
+  36   2              case IC1:
+  37   2                SFRS=3;T2ACMP&=0xF3;T2ACMP|=u8CAPSource<<2;
+  38   2                SFRS=1;CAPCON1&=0xF3;CAPCON1|=u8CAPLevel<<2;
+  39   2                set_CAPCON2_ENF1;
+  40   2                set_CAPCON0_CAPEN1;
+  41   2                SFRS=0;T2MOD&=0xFC;T2MOD|=0x02;
+  42   2                SFRS=1;C1H=0; C1L=0;
+  43   2              break;
+  44   2              case IC2:
+  45   2                SFRS=3;T2ACMP&=0xCF;T2ACMP|=u8CAPSource<<4;
+  46   2                SFRS=1;CAPCON1&=0xCF;CAPCON1|=u8CAPLevel<<4;
+  47   2                set_CAPCON2_ENF2;
+C51 COMPILER V9.60.0.0   CAPTURE                                                           05/11/2021 11:48:26 PAGE 2   
+
+  48   2                set_CAPCON0_CAPEN2;
+  49   2                SFRS=0;T2MOD&=0xFC;T2MOD|=0x03;
+  50   2                SFRS=1;C2H=0; C2L=0;
+  51   2              break;
+  52   2          }
+  53   1          clr_T2CON_TF2;
+  54   1          set_T2CON_TR2;
+  55   1      
+  56   1      }
+  57          
+  58          /**
+  59           * @brief       Timer 2 capture interrupt initial setting 
+  60           * @param       u8CAPINT capture interrupt (Disable / Enable)
+  61           * @return      none
+  62           * @details     none
+  63           * @example      TIMER2_Capture_Interrupt(Enable);
+  64           */
+  65          void TIMER2_Capture_Interrupt(unsigned char u8CAPINT)
+  66          {
+  67   1          switch (u8CAPINT)
+  68   1          {
+  69   2              case Disable: clr_EIE0_ECAP; break;
+  70   2              case Enable:  set_EIE0_ECAP; break;
+  71   2          }
+  72   1      }
+  73          
+  74          
+  75          /**
+  76           * @brief       Timer2 Clock source setting 
+  77           * @param       u8CAPSource input capture module select (TM2_FSYS/P40/P54/P32)
+  78           * @return      none
+  79           * @details     none
+  80           * @example     TIMER2_Clcok_Source(TM2_P40);
+  81           */
+  82          void TIMER2_Clcok_Source(unsigned char u8TM2CKSource)
+  83          {
+  84   1          SFRS=3;
+  85   1          T2ACMP|= u8TM2CKSource<<6;
+  86   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    232    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       4
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,5 @@
+MUG51 BSP 
+
+Timer 2
+        Added Timer2 clock source select: void TIMER2_Clcok_Source(unsigned char u8TM2CKSource)
+        void TIMER2_Capture add @param u8CAPSource rename @param u8CAPSource to @param u8CAPChannel
