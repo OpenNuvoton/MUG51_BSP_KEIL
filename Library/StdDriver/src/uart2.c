@@ -1,15 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Nuvoton Technoledge Corp. 
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Jun/21/2020
-//***********************************************************************************************************
 
 #include "MUG51.h"
 
@@ -30,7 +24,7 @@ void SMC0_ISR(void) interrupt 19          // Vector @  0x9B
  * @param       u32Baudrate, Define baudrate (value)
  * @return      none
  * @details     none
- * @example:    UART2_Open(24000000,115200)
+ * @example:    UART2_Open(7372800,115200)
  */ 
 void UART2_Open(unsigned long u32SysClock, unsigned long u32Baudrate)
 {

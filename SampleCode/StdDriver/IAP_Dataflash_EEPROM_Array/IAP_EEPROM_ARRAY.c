@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021 
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MlL51  IAP program dataflash as EEPROM demo code
@@ -46,10 +41,7 @@ void main(void)
  For UART0 P3.1 as TXD output setting 
  * include uart.c in Common Setting for UART0 
 */
-    MFP_P31_UART0_TXD;                              // UART0 TXD use P1.6
-    P31_QUASI_MODE;                                  // set P1.6 as Quasi mode for UART0 trasnfer
-    UART_Open(24000000,UART0_Timer1,115200);        // Open UART0 use timer1 as baudrate generate and baud rate = 115200
-    ENABLE_UART0_PRINTF;
+    Enable_P31_UART0_VCOM_115200_printf();
 #endif  
 
     MFP_P46_GPIO;

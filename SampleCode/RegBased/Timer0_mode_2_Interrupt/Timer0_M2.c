@@ -17,7 +17,7 @@
 
 
 /* if define TIMER0_FSYS_DIV12, timer = (256-56)*12/246MHz = 100us */
-/* if define TIMER0_FSYS, timer = (256-56)/24MHz = 8.33us */
+/* if define TIMER0_FSYS, timer = (256-56)/7.3728MHz = 8.33us */
 #define TH0_INIT        56 
 #define TL0_INIT        56
 

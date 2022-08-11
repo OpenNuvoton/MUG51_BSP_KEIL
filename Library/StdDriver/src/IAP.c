@@ -1,18 +1,14 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 
-/************************************************************************************************************
-  Website: http://www.nuvoton.com
-  E-Mail : MicroC-8bit@nuvoton.com
-************************************************************************************************************/
-
 #include "MUG51.h"
 unsigned char xdata DIDBuffer[4];
-unsigned char xdata UIDBuffer[9];
-unsigned char xdata UCIDBuffer[12];
+unsigned char xdata UIDBuffer[12];
+unsigned char xdata UCIDBuffer[16];
 unsigned char xdata IAPDataBuf[128];
 unsigned char xdata IAPCFBuf[5];
 
@@ -293,7 +289,7 @@ void UCID_Read(void)
     IAPAL = 0x20;
     IAPAH = 0x00;
     IAPCN = READ_UID;
-    for(u8Count=0;u8Count<12;u8Count++)
+    for(u8Count=0;u8Count<16;u8Count++)
     {   
         IAPFD = 0x00;
         set_IAPTRG_IAPGO;

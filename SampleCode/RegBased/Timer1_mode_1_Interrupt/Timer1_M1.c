@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MUG51 Timer1 demo
@@ -16,8 +11,8 @@
 #include "MUG51.h"
 
 
-/* if define TIMER1_FSYS_DIV12, timer = (0xFFFF-0x1000)*12/24MHz = 30.58ms */
-/* if define TIMER1_FSYS, timer = (0xFFFF-0x1000)/24MHz = 2.54ms */
+/* if define TIMER1_FSYS_DIV12, timer = (0xFFFF-0x1000)*12/7.3728MHz = 30.58ms */
+/* if define TIMER1_FSYS, timer = (0xFFFF-0x1000)/7.3728MHz = 2.54ms */
 #define TH1_INIT        0x10 
 #define TL1_INIT        0x00
 

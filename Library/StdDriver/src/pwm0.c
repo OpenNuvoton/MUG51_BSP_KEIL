@@ -1,13 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//***********************************************************************************************************
 
 #include "MUG51.h"
 
@@ -134,7 +130,7 @@ void PWM0_DeadZone_ALL_Disable(void)
 * @note        
 * @example PWM0_RUN();
 */
-void PWM0_RUN(void)
+void PWM0_Run(void)
 {
     set_PWM0CON0_PWMRUN;
 }
@@ -146,8 +142,19 @@ void PWM0_RUN(void)
 * @note        
 * @example PWM0_RUN();
 */
-void PWM0_STOP(void)
+void PWM0_Stop(void)
 {
   clr_PWM0CON0_PWMRUN;
 }
 
+/**
+* @brief This function action all PWM reload data
+* @param[in] none
+* @return none
+* @note        
+* @example PWM0_Reload();
+*/
+void PWM0_Reload(void)
+{
+    set_PWM0CON0_LOAD;
+}

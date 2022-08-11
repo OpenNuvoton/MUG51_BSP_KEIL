@@ -15,5 +15,5 @@ void UART_Send_Data(unsigned char UARTPort, unsigned char c);
 unsigned char UART_Receive_Data(unsigned char UARTPort);
 void UART_Interrupt_Enable(unsigned char UARTPort, unsigned char u8UARTINTStatus);
 void UART0_LIRC_Baudrate2400_Open(void);
-void Enable_UART0_VCOM_printf(void);
-void Enable_UART0_VCOM_38400_printf(void);
+void Enable_P31_UART0_VCOM_115200_printf(void);
+void Enable_P31_UART0_VCOM_38400_printf(void);

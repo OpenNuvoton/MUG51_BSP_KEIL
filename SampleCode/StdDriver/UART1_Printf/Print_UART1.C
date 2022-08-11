@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-/***********************************************************************************************************/
-/*  Website: http://www.nuvoton.com                                                                        */
-/*  E-Mail : MicroC-8bit@nuvoton.com                                                                       */
-/*  Date   : Apr/29/2021                                                                                   */
-/***********************************************************************************************************/
 
 //***********************************************************************************************************
 //  File Function: MUG51 UART1 output for printf function demo
@@ -17,10 +12,7 @@
 
 void main (void) 
 {
-    MFP_P23_UART1_TXD;
-    P23_QUASI_MODE;
-    UART_Open(24000000,UART1_Timer3,115200);
-    ENABLE_UART1_PRINTF;
+    Enable_P31_UART0_VCOM_115200_printf();
     printf("\n hello world !!!");
 
     while(1);

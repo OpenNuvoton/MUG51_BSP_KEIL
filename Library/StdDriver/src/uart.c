@@ -1,22 +1,19 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 
-//***********************************************************************************************************
-//  Nuvoton Technoledge Corp. 
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021
-//***********************************************************************************************************
-
 #include "MUG51.h"
+
+#define FSYSCLK  7372800
+
 bit UART0PRINTFG=0,UART1PRINTFG=0, uart0_receive_flag = 0, uart1_receive_flag;
 unsigned char uart0_receive_data, uart1_receive_data;
 
 
-void Enable_UART0_VCOM_printf(void)
+void Enable_P31_UART0_VCOM_115200_printf(void)
 {
   /* UART0 initial setting
   ** include uart.c in Library for UART initial setting
@@ -24,11 +21,11 @@ void Enable_UART0_VCOM_printf(void)
   **/
     MFP_P31_UART0_TXD;
     P31_QUASI_MODE;
-    UART_Open(9126000,UART0_Timer3,115200);
+    UART_Open(FSYSCLK,UART0_Timer3,115200);
     ENABLE_UART0_PRINTF;
 }
 
-void Enable_UART0_VCOM_38400_printf(void)
+void Enable_P31_UART0_VCOM_38400_printf(void)
 {
   /* UART0 initial setting
   ** include uart.c in Library for UART initial setting
@@ -36,7 +33,7 @@ void Enable_UART0_VCOM_38400_printf(void)
   **/
     MFP_P31_UART0_TXD;
     P31_QUASI_MODE;
-    UART_Open(8000000,UART0_Timer3,38400);
+    UART_Open(FSYSCLK,UART0_Timer3,38400);
     ENABLE_UART0_PRINTF;
 }
 /* UART0 interrupt subroutine */
@@ -87,14 +84,14 @@ void UART1_ISR(void) interrupt 15
  * @param       UART0~3, baudrate value
  * @return      none
  * @details     none
- * @note        max baud rate = 1.5MHz when Fsys = 24MHz
+ * @note        max baud rate = 230400 when Fsys = 7.3728MHz
  */
 //****************************************************************************************************************  
 //**** UART Enable Setting  
 //**** 1. Define Fsys value(value)
 //**** 2. Select UART port(UART0_Timer1 / UART0_Timer3 / UART1_Timer3 / UART2/UART3) 
 //**** 3. Define baudrate (value)
-//**** For example: UART_Open(24000000,UART0_Timer1,115200)
+//**** For example: UART_Open(7372800,UART0_Timer3,115200)
 void UART_Open(unsigned long u32SysClock, unsigned char u8UARTPort,unsigned long u32Baudrate)
 {
   switch(u8UARTPort)
@@ -184,7 +181,7 @@ void UART_Send_Data(unsigned char UARTPort, unsigned char c)
  * @param       u8UARTINTStatus: Disable/Enable
  * @return      none
  * @details     none
- * @note        max baud rate = 1.5MHz when Fsys = 24MHz
+ * @note        max baud rate =  230400 when Fsys = 7.3728MHz
  */
 void UART_Interrupt_Enable(unsigned char u8UARTPort, unsigned char u8UARTINTStatus)
 {

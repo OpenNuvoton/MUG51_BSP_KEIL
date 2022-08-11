@@ -1,22 +1,19 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-/***********************************************************************************************************/
-/* Website: http://www.nuvoton.com                                                                         */
-/*  E-Mail : MicroC-8bit@nuvoton.com                                                                       */
-/*  Date   : Apr/29/2021                                                                                   */
-/***********************************************************************************************************/
 
 /***********************************************************************************************************
 //  File Function: MUG51 UART0 receive and transmit loop test
 /***********************************************************************************************************/
 #include "MUG51.h"
 
-#define  UART0_TX_only
-//#define  UART0_RXTX_loop
+#define  FSYSCLK  7372800
+
+#define  UART0_RXTX_loop
+//#define  UART0_TX_only
 /************************************************************************************************************/
 /*  Main function                                                                                           */
 /************************************************************************************************************/
@@ -27,7 +24,8 @@
     P31_QUASI_MODE;
     MFP_P30_UART0_RXD;
     P30_INPUT_MODE;
-    UART_Open(8000000,UART0_Timer3,38400);
+
+    UART_Open(FSYSCLK, UART0_Timer3, 115200);
 
     ENABLE_UART0_INTERRUPT;                                   /* Enable UART0 interrupt */
     ENABLE_GLOBAL_INTERRUPT;                                  /* Global interrupt enable */
@@ -35,8 +33,8 @@
 #if defined UART0_TX_only
     while (1)
     {
-      UART_Send_Data(UART0,0x55);
-      Timer0_Delay1ms(500);
+      SFRS=0; UART_Send_Data(UART0,0x55);
+      Timer0_Delay1ms(5);
     }
 
 #elif defined UART0_RXTX_loop
@@ -46,7 +44,7 @@
     if (uart0_receive_flag)
     {
       uart0_receive_flag = 0;
-      UART_Send_Data(UART0,uart0_receive_data);
+      SFRS=0; UART_Send_Data(UART0,uart0_receive_data);
     }
   }
 #endif 

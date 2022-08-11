@@ -1,13 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MUG51 simple GPIO toggle out demo code
@@ -30,7 +26,7 @@ void main (void)
     MFP_P24_UART2_RXD;
     P24_INPUT_MODE;                              /* Set UART2_RXD pin P1.7 as Input mode */
 
-    UART2_Open(24000000,9600);                 /* Open UART2 use timer1 as baudrate generate and baud rate = 115200*/
+    UART2_Open(7372800,9600);                 /* Open UART2 use timer1 as baudrate generate and baud rate = 115200*/
     ENABLE_SC0_RECEIVE_DATA_REACH_INTERRUPT;
     ENABLE_GLOBAL_INTERRUPT;
 

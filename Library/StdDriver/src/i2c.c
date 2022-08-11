@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 
@@ -16,7 +17,7 @@
   * @details    The function enable the specify I2C controller and set proper clock divider
   *             in I2C CLOCK DIVIDED REGISTER (I2CLK) according to the target I2C Bus clock.
   *             I2C bus clock = PCLK / (4*(u32I2CCLK+1).
-  * @exmaple :  I2C0_Open(I2C0,24000000,100000);
+  * @exmaple :  I2C0_Open(I2C0,7372800,100000);
   */
 void I2C_Open(unsigned char u8I2CSel, unsigned long u32SYSCLK, unsigned long u32I2CCLK)
 {

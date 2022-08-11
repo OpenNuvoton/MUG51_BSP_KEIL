@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021 
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MUG51 Read UID demo code
@@ -27,25 +22,20 @@ void main(void)
   unsigned char READ;
 
 #ifdef print_function  
-/* Initial UART0 for printf */
-    MFP_P31_UART0_TXD;
-    P31_PUSHPULL_MODE;
-    UART_Open(8000000,UART0_Timer3,38400);
-    ENABLE_UART0_PRINTF;
+    Enable_P31_UART0_VCOM_115200_printf();
 #endif  
  
   UID_Read();
 #ifdef print_function
   /*printf must in SFR page 0 */
-	_push_(SFRS);
-	SFRS = 0;		
-  printf ("\n UID = ");
-  for(READ=0;READ<12;READ++)
-  {
-    printf (" 0x%bx",UIDBuffer[READ]);
-  }
-  _pop_(SFRS);
-#endif    
+    _push_(SFRS);
+    SFRS = 0; printf ("\n UID = ");
+    for(READ=0;READ<12;READ++)
+    {
+      printf (" 0x%bx",UIDBuffer[READ]);
+    }
+    _pop_(SFRS);
+#endif
   while(1);
 
 

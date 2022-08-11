@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MUG51 INT1 initial 
@@ -30,7 +25,7 @@ void INT1_ISR (void) interrupt 2          // Vector @  0x13
 void main (void) 
 {
 #ifdef  print_function
-    Enable_UART0_VCOM_38400_printf();
+    Enable_P31_UART0_VCOM_115200_printf();
     printf ("\n P24 INT1 external interrupt initial!!");
 #endif
 

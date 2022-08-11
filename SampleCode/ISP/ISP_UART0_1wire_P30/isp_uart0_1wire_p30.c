@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2018 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 
@@ -75,7 +76,7 @@ void TM0_ini(void)
 }
 
 
-void UART0_ini_115200_24MHz_OneWire(void)
+void UART0_ini_115200_7.3728MHz_OneWire(void)
 {
     MFP_P30_UART0_RXD;                              /* set P3.0 as  Quasi mode for 1-wire UART0 trasnfer */
     P30_QUASI_MODE;

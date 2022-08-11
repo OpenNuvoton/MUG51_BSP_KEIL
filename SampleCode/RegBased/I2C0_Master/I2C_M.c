@@ -1,15 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Nuvoton Technoledge Corp. 
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021                                                        
-//***********************************************************************************************************
 
 
 #include "MUG51.h"
@@ -157,7 +151,7 @@ void main(void)
 /* IMPORTANT !! This define for printf code only. Disable this define to reduce code size. */
 
 #ifdef print_function 
-    Enable_UART0_VCOM_38400_printf();
+    Enable_P31_UART0_VCOM_115200_printf();
     printf ("\n i2c initial ");
 #endif
     Init_I2C();                                 /* initial I2C circuit  */

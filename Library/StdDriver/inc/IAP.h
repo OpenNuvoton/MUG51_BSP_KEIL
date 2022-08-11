@@ -2,8 +2,8 @@
 #define     PAGE_SIZE               128
 
 extern unsigned char xdata DIDBuffer[4];
-extern unsigned char xdata UIDBuffer[9];
-extern unsigned char xdata UCIDBuffer[12];
+extern unsigned char xdata UIDBuffer[12];
+extern unsigned char xdata UCIDBuffer[16];
 extern unsigned char xdata IAPDataBuf[128];
 extern unsigned char xdata IAPCFBuf[5];
 extern unsigned char xdata CHECKSUMBuf[1];

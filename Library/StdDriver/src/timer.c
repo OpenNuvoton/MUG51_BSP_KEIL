@@ -1,13 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//***********************************************************************************************************
 
 #include "MUG51.h"
 
@@ -23,7 +19,7 @@ unsigned char data TH0TMP,TL0TMP,TH1TMP,TL1TMP;
   *                       - \ref 24 (use HIRC)
   *                       - \ref 8  (use MIRC)
   * @param[in] u6DLYUnit define delay time base is us. the minimum delay value not less than 100us, the maxima value base on u32SYSCLK
-  *                       - \ref for 24MHz (use HIRC) value range is 100 ~ 32768.
+  *                       - \ref for 7.3728MHz (use HIRC) value range is 100 ~ 32768.
   *                       - \ref for 8MHz  (use MIRC) value range is 100 ~ 65536.
   * @return  None 
   * @note    This initial subroutine must with following Timer 0 interrupt vector.
@@ -61,7 +57,7 @@ void Timer0_AutoReload_Interrupt_Initial(unsigned char u8SYSCLK, unsigned long u
   *                       - \ref 24 (use HIRC)
   *                       - \ref 8  (use MIRC)
   * @param[in] u6DLYUnit define delay time base is us. the minimum delay value not less than 100us, the maxima value base on u32SYSCLK
-  *                       - \ref for 24MHz (use HIRC) value range is 100 ~ 32768.
+  *                       - \ref for 7.3728MHz (use HIRC) value range is 100 ~ 32768.
   *                       - \ref for 8MHz  (use MIRC) value range is 100 ~ 65536.
   * @return  None
   * @note    This initial subroutine must with following Timer 1 interrupt vector.
@@ -99,7 +95,7 @@ void Timer1_AutoReload_Interrupt_Initial(unsigned char u8SYSCLK, unsigned long u
   *                       - \ref 24 (use HIRC)
   *                       - \ref 8  (use MIRC)
   * @param[in] u6DLYUnit define delay time base is us. the minimum delay value not less than 100us, the maxima value base on u32SYSCLK
-  *                       - \ref for 24MHz (use HIRC) value range is 100 ~ 699050.  means delay time from about 100us ~ 700ms
+  *                       - \ref for 7.3728MHz (use HIRC) value range is 100 ~ 699050.  means delay time from about 100us ~ 700ms
   *                       - \ref for 8MHz  (use MIRC) value range is 100 ~ 2097120.  means delay time from about 100us ~ 2.1s
   * @return  None
   * @note    Timer 2 divider fixed with 256. suggest delay range is from 10ms ~ 2s
@@ -134,7 +130,7 @@ void Timer2_AutoReload_Interrupt_Initial(unsigned char u8SYSCLK, unsigned long u
   *                       - \ref 24 (use HIRC)
   *                       - \ref 8  (use MIRC)
   * @param[in] u6DLYUnit define delay time base is us. the minimum delay value not less than 100us, the maxima value base on u32SYSCLK
-  *                       - \ref for 24MHz (use HIRC) value range is 100 ~ 349525.  means delay time from about 100us ~ 350ms
+  *                       - \ref for 7.3728MHz (use HIRC) value range is 100 ~ 349525.  means delay time from about 100us ~ 350ms
   *                       - \ref for 8MHz  (use MIRC) value range is 100 ~ 1048560.  means delay time from about 100us ~ 1.04s
   * @return  None
   * @note    Timer 2 divider fixed with 128.

@@ -1,13 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//***********************************************************************************************************
 
 #include "MUG51.h"
 
@@ -38,14 +34,14 @@ void main (void)
   ** include uart.c in Library for UART initial setting
   **UART0 define P3.1 TXD multi function setting
   **/
-  Enable_UART0_VCOM_38400_printf();
+  Enable_P31_UART0_VCOM_115200_printf();
   printf("\n PDMA receiv UART2 RX intial...");
 #endif
     
  /* Enable UART2 RX */      
     MFP_P55_UART2_RXD;
     P55_INPUT_MODE;
-    UART_Open(24000000,UART2,115200);
+    UART_Open(7372800,UART2,115200);
   
  /* Clear XRAM base address area to 00h */
     for(ct=0;ct<10;ct++)

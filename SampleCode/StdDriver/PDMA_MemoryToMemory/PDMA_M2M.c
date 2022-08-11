@@ -1,13 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//***********************************************************************************************************
 
 #include "MUG51.h"
 
@@ -42,7 +38,7 @@ void main (void)
   ** include uart.c in Library for UART initial setting
   **UART0 define P3.1 TXD multi function setting
   **/
-  Enable_UART0_VCOM_38400_printf();
+  Enable_P31_UART0_VCOM_115200_printf();
   printf("\n ADC trig by GPIO intial...");
 #endif
     for(i=0;i<100;i++)

@@ -23,7 +23,7 @@ void main (void)
    For UART0 P3.1 as TXD output setting   
    include uart.c in Library Folder for UART0 
 */
-    Enable_UART0_VCOM_38400_printf();
+    Enable_P31_UART0_VCOM_115200_printf();
     printf("\n Hello world!");
     while(1);
 

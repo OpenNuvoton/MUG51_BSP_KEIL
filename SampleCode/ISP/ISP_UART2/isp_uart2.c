@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 
@@ -87,9 +88,9 @@ void UART2_ini_115200(void)
   set_SC0CR1_CLKKEEP;      
   clr_SC0CR0_CONSEL;       /* clr CONSEL and AUTOCEN*/
   clr_SC0CR0_AUTOCEN;
-  SC0ETURD0 = LOBYTE(24000000/8/115200-1);  /* define baud rate low byte */
+  SC0ETURD0 = LOBYTE(7372800/8/115200-1);  /* define baud rate low byte */
   SC0ETURD1 &= 0xF0;                                /* define baud rate high byte */
-  SC0ETURD1 |= (HIBYTE(24000000/8/115200-1))&0x0F; 
+  SC0ETURD1 |= (HIBYTE(7372800/8/115200-1))&0x0F; 
   set_SC0CR1_PBOFF;     //parity bit disable
   SC0CR1&=0XCF;        //datalegth 8bit
   set_SC0CR0_NSB;      //stop bit = 1bit  

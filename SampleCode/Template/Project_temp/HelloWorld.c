@@ -1,13 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MUG51 simple GPIO toggle out demo code
@@ -21,7 +17,7 @@ void main (void)
     unsigned char ct;
     ALL_GPIO_QUASI_MODE;
 
-    Enable_UART0_VCOM_38400_printf();
+    Enable_P31_UART0_VCOM_115200_printf();
 
     for (ct=0;ct<5;ct++)
     {
@@ -34,7 +30,7 @@ void main (void)
       Timer0_Delay50ms(4);
     }
     P31 = 1;
-    printf("\n Hello world!");
+    SFRS=0; printf("\n Hello world!");
     while(1);
 }
 

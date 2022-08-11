@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-/***********************************************************************************************************/
-/* Website: http://www.nuvoton.com                                                                         */
-/*  E-Mail : MicroC-8bit@nuvoton.com                                                                       */
-/*  Date   : Apr/29/2021                                                                                   */
-/***********************************************************************************************************/
 
 /************************************************************************************************************/
 /*  File Function: MUG51 UART1 with interrupt demo                                                           */
@@ -32,7 +27,7 @@ void main (void)
     MFP_P22_UART1_RXD;
     P22_INPUT_MODE;
 
-    UART_Open(24000000,UART1_Timer3,115200);
+    UART_Open(7372800,UART1_Timer3,115200);
     ENABLE_UART1_INTERRUPT;                 //For interrupt enable , interrupt subroutine is in uart.c file
     ENABLE_GLOBAL_INTERRUPT;                //Enable global interrupt
 

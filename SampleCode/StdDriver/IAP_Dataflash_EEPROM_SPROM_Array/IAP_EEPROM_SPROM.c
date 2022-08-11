@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021 
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MlL51 IAP Dataflash SPROM demo code 
@@ -57,7 +52,7 @@ void main(void)
 #endif
   
 /* UART0 initial setting
-  * include sys.c in Library for modify HIRC value to 24MHz
+  * include sys.c in Library for modify HIRC value to 7.3728MHz
   * include uart.c in Library for UART initial setting
 */
 #ifdef print_function  
@@ -66,10 +61,7 @@ void main(void)
  For UART0 P3.1 as TXD output setting 
  * include uart.c in Common Setting for UART0 
 */
-    MFP_P31_UART0_TXD;                              // UART0 TXD use P3.1
-    P31_QUASI_MODE;                                 // set P3.1 as Quasi mode for UART0 trasnfer
-    UART_Open(24000000,UART0_Timer1,115200);        // Open UART0 use timer1 as baudrate generate and baud rate = 115200
-    ENABLE_UART0_PRINTF;
+    Enable_P31_UART0_VCOM_115200_printf();
 #endif  
     /*loop here while P46 = 1; */
     P46_QUASI_MODE;

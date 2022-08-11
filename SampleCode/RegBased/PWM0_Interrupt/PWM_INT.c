@@ -1,14 +1,9 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
-
-//***********************************************************************************************************
-//  Website: http://www.nuvoton.com
-//  E-Mail : MicroC-8bit@nuvoton.com
-//  Date   : Apr/29/2021
-//***********************************************************************************************************
 
 //***********************************************************************************************************
 //  File Function: MUG51 PWM output falling edge trig interrupt demo
@@ -45,13 +40,13 @@ void main(void)
   ** include uart.c in Library for UART initial setting
   **UART0 define P3.1 TXD multi function setting
   **/
-  Enable_UART0_VCOM_38400_printf();
+  Enable_P31_UART0_VCOM_115200_printf();
   printf("\n ADC trig by GPIO intial...");
 #endif
 
 /**********************************************************************
   PWM frequency = Fpwm/((PWMPH,PWMPL) + 1) <Fpwm = Fsys/PWM_CLOCK_DIV> 
-                = (24MHz/8)/(PWMH+PWML + 1)
+                = (7.3728MHz/8)/(PWMH+PWML + 1)
 ***********************************************************************/
     MFP_P24_PWM0_CH1;
     P24_PUSHPULL_MODE;

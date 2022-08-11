@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------------------------------------------------*/
 /*                                                                                                         */
-/* Copyright(c) 2021 Nuvoton Technology Corp. All rights reserved.                                         */
+/* SPDX-License-Identifier: Apache-2.0                                                                     */
+/* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                         */
 /*                                                                                                         */
 /*---------------------------------------------------------------------------------------------------------*/
 
@@ -22,7 +23,7 @@ void main (void)
   set_CHPCON_IAPEN;  
   TA=0X55;TA=0XAA;WDCON=0x07;
 //uart initial for ISP programmer GUI, always use 115200 baudrate
-  UART0_ini_115200_24MHz();
+  UART0_ini_115200_7.3728MHz();
   TM0_ini();
 
   g_timer0Over=0;
