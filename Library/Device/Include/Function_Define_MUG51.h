@@ -942,34 +942,39 @@ typedef signed long           int32_t;
 /*----- ------ ------ P0 MFP ------ ------ ------*/
 /* P0.0 */  /* Mapping == PA0 */
 #define    MFP_P00_GPIO                    SFRS=2;P0MF10&=0xF0         /*!<  P0.0 MFP setting for GPIO       */ 
-#define    MFP_P00_SPI0_MOSI               SFRS=2;P0MF10&=0xF0;P0MF10|=0x03  
+#define    MFP_P00_SPI0_MOSI               SFRS=2;P0MF10&=0xF0;P0MF10|=0x03
 #define    MFP_P00_SPI1_MOSI               SFRS=2;P0MF10&=0xF0;P0MF10|=0x04
-#define    MFP_P00_UART2_TXD               SFRS=2;P0MF10&=0xF0;P0MF10|=0x06  
+#define    MFP_P00_UART2_TXD               SFRS=2;P0MF10&=0xF0;P0MF10|=0x06
 #define    MFP_P00_UART0_RXD               SFRS=2;P0MF10&=0xF0;P0MF10|=0x07
-#define    MFP_P00_TK1                     SFRS=2;P0MF10&=0xF0;P0MF10|=0x0A   
-#define    MFP_P00_PWM0_CH5                SFRS=2;P0MF10&=0xF0;P0MF10|=0x0D   
+#define    MFP_P00_TK1                     SFRS=2;P0MF10&=0xF0;P0MF10|=0x0A
+#define    MFP_P00_PWM0_CH5                SFRS=2;P0MF10&=0xF0;P0MF10|=0x0D
            
 /* P0.1 */  /* Mapping == PA1 */
 #define    MFP_P01_GPIO                    SFRS=2;P0MF10&=0x0F         /*!<  P0.1 MFP setting for GPIO       */ 
 #define    MFP_P01_PINV                    SFRS=2;P0MF10&=0x0F;P0MF10|=0x10
-#define    MFP_P01_SPI0_MISO               SFRS=2;P0MF10&=0x0F;P0MF10|=0x30  
+#define    MFP_P01_SPI0_MISO               SFRS=2;P0MF10&=0x0F;P0MF10|=0x30
 #define    MFP_P01_SPI1_MISO               SFRS=2;P0MF10&=0x0F;P0MF10|=0x40
 #define    MFP_P01_UART2_RXD               SFRS=2;P0MF10&=0x0F;P0MF10|=0x60
 #define    MFP_P01_UART0_TXD               SFRS=2;P0MF10&=0x0F;P0MF10|=0x70
-#define    MFP_P01_TK2                     SFRS=2;P0MF10&=0x0F;P0MF10|=0xA0  
+#define    MFP_P01_TK2                     SFRS=2;P0MF10&=0x0F;P0MF10|=0xA0
 #define    MFP_P01_PWM0_CH4                SFRS=2;P0MF10&=0x0F;P0MF10|=0xD0
-           
+#define    MFP_P01_PBUF                    SFRS=2;P0MF10&=0x0F;P0MF10|=0xE0
+
 /* P0.2 */  /* Mapping == PA2 */
 #define    MFP_P02_GPIO                    SFRS=2;P0MF32&=0xF0         /*!<  P0.2 MFP setting for GPIO       */ 
-#define    MFP_P02_SPI0_CLK                SFRS=2;P0MF32&=0xF0;P0MF32|=0x03  
-#define    MFP_P02_SPI1_CLK                SFRS=2;P0MF32&=0xF0;P0MF32|=0x04  
-#define    MFP_P02_UART1_RXD               SFRS=2;P0MF32&=0xF0;P0MF32|=0x08   
+#define    MFP_P02_PINV                    SFRS=2;P0MF32&=0xF0;P0MF32|=0x01
+#define    MFP_P02_SPI0_CLK                SFRS=2;P0MF32&=0xF0;P0MF32|=0x03
+#define    MFP_P02_SPI1_CLK                SFRS=2;P0MF32&=0xF0;P0MF32|=0x04
+#define    MFP_P02_UART1_RXD               SFRS=2;P0MF32&=0xF0;P0MF32|=0x08
 #define    MFP_P02_I2C1_SDA                SFRS=2;P0MF32&=0xF0;P0MF32|=0x09
-#define    MFP_P02_TK3                     SFRS=2;P0MF32&=0xF0;P0MF32|=0x0A   
-#define    MFP_P02_PWM0_CH3                SFRS=2;P0MF32&=0xF0;P0MF32|=0x0D   
-           
+#define    MFP_P02_TK3                     SFRS=2;P0MF32&=0xF0;P0MF32|=0x0A
+#define    MFP_P02_PWM0_CH3                SFRS=2;P0MF32&=0xF0;P0MF32|=0x0D
+#define    MFP_P02_PBUF                    SFRS=2;P0MF32&=0xF0;P0MF32|=0x0E
+
 /* P0.3 */  /* Mapping == PA3 */
 #define    MFP_P03_GPIO                    SFRS=2;P0MF32&=0x0F         /*!<  P0.3 MFP setting for GPIO       */ //Modify
+#define    MFP_P03_PINV                    SFRS=2;P0MF32&=0x0F;P0MF32|=0x10
+#define    MFP_P03_PBUF                    SFRS=2;P0MF32&=0x0F;P0MF32|=0x20
 #define    MFP_P03_SPI0_SS                 SFRS=2;P0MF32&=0x0F;P0MF32|=0x30
 #define    MFP_P03_SPI1_SS                 SFRS=2;P0MF32&=0x0F;P0MF32|=0x40
 #define    MFP_P03_UART1_TXD               SFRS=2;P0MF32&=0x0F;P0MF32|=0x80
@@ -985,7 +990,7 @@ typedef signed long           int32_t;
 #define    MFP_P04_I2C0_SDA                SFRS=2;P0MF54&=0xF0;P0MF54|=0x09
 #define    MFP_P04_TK5                     SFRS=2;P0MF54&=0xF0;P0MF54|=0x0A
 #define    MFP_P04_PWM0_CH1                SFRS=2;P0MF54&=0xF0;P0MF54|=0x0D
-           
+
 /* P0.5 */  /* Mapping == PA5 */
 #define    MFP_P05_GPIO                    SFRS=2;P0MF54&=0x0F         /*!<  P0.5 MFP setting for GPIO       */ 
 #define    MFP_P05_UART0_TXD               SFRS=2;P0MF54&=0x0F;P0MF54|=0x80  
@@ -1041,33 +1046,38 @@ typedef signed long           int32_t;
 #define    MFP_P15_LCD_COM5                SFRS=2;P1MF54&=0x0F;P1MF54|=0x50
 /* P1.6 */  /* Mapping == PA14 */
 #define    MFP_P16_GPIO                    SFRS=2;P1MF76&=0xF0         /*!<  P1.6 MFP setting for GPIO       */ 
-#define    MFP_P16_LCD_SEG19               SFRS=2;P1MF76&=0xF0;P1MF76|=0x02  
-#define    MFP_P16_UART0_TXD               SFRS=2;P1MF76&=0xF0;P1MF76|=0x03 
-#define    MFP_P16_LCD_COM6                SFRS=2;P1MF76&=0xF0;P1MF76|=0x05 
+#define    MFP_P16_PINV                    SFRS=2;P1MF76&=0xF0;P1MF76|=0x01
+#define    MFP_P16_LCD_SEG19               SFRS=2;P1MF76&=0xF0;P1MF76|=0x02
+#define    MFP_P16_UART0_TXD               SFRS=2;P1MF76&=0xF0;P1MF76|=0x03
+#define    MFP_P16_LCD_COM6                SFRS=2;P1MF76&=0xF0;P1MF76|=0x05
+#define    MFP_P16_PBUF                    SFRS=2;P1MF76&=0xF0;P1MF76|=0x0B
 /* P1.7 */  /* Mapping == PA15 */                                   
 #define    MFP_P17_GPIO                    SFRS=2;P1MF76&=0x0F          /*!<  P1.7 MFP setting for GPIO       */ 
+#define    MFP_P17_PINV                    SFRS=2;P1MF76&=0x0F;P1MF76|=0x10
 #define    MFP_P17_LCD_SEG18               SFRS=2;P1MF76&=0x0F;P1MF76|=0x20
 #define    MFP_P17_UART0_RXD               SFRS=2;P1MF76&=0x0F;P1MF76|=0x30
 #define    MFP_P17_LCD_COM7                SFRS=2;P1MF76&=0x0F;P1MF76|=0x50
+#define    MFP_P17_PBUF                    SFRS=2;P1MF76&=0x0F;P1MF76|=0xB0
 /*----- ------ ------ ------ ------ ------ ------*/
-           
+
 /*----- ------ ------ P2 MFP ------ ------ ------*/
 /* P2.0    */  /* Mapping == PB0 */                                   
 #define    MFP_P20_GPIO                    SFRS=2;P2MF10&=0xF0         /*!<  P2.0 MFP setting for GPIO       */    
 #define    MFP_P20_ADC_CH5                 SFRS=2;P2MF10&=0xF0;P2MF10|=0x01
-#define    MFP_P20_ACMP0_N1                SFRS=2;P2MF10&=0xF0;P2MF10|=0x01  
+#define    MFP_P20_ACMP0_N1                SFRS=2;P2MF10&=0xF0;P2MF10|=0x01
 #define    MFP_P20_LCD_SEG4                SFRS=2;P2MF10&=0xF0;P2MF10|=0x02
-#define    MFP_P20_UART2_RXD               SFRS=2;P2MF10&=0xF0;P2MF10|=0x07  
-#define    MFP_P20_I2C1_SDA                SFRS=2;P2MF10&=0xF0;P2MF10|=0x09       
+#define    MFP_P20_UART2_RXD               SFRS=2;P2MF10&=0xF0;P2MF10|=0x07
+#define    MFP_P20_I2C1_SDA                SFRS=2;P2MF10&=0xF0;P2MF10|=0x09
 #define    MFP_P20_PWM0_CH5                SFRS=2;P2MF10&=0xF0;P2MF10|=0x0B
 #define    MFP_P20_PWM3_CH1                SFRS=2;P2MF10&=0xF0;P2MF10|=0x0C
-#define    MFP_P20_PWM0_BRAKE              SFRS=2;P2MF10&=0xF0;P2MF10|=0x0D       
+#define    MFP_P20_PWM0_BRAKE              SFRS=2;P2MF10&=0xF0;P2MF10|=0x0D
 /* P2.1    */  /* Mapping == PB1 */
 #define    MFP_P21_GPIO                    SFRS=2;P2MF10&=0x0F         /*!<  P2.1 MFP setting for GPIO       */ 
 #define    MFP_P21_ADC_CH4                 SFRS=2;P2MF10&=0x0F;P2MF10|=0x10
 #define    MFP_P21_ACMP0_P2                SFRS=2;P2MF10&=0x0F;P2MF10|=0x10
 #define    MFP_P21_ACMP1_P2                SFRS=2;P2MF10&=0x0F;P2MF10|=0x10
-#define    MFP_P21_LCD_SEG5                SFRS=2;P2MF10&=0x0F;P2MF10|=0x20 
+#define    MFP_P21_PINV                    SFRS=2;P2MF10&=0x0F;P2MF10|=0x30
+#define    MFP_P21_PBUF                    SFRS=2;P2MF10&=0x0F;P2MF10|=0x40
 #define    MFP_P21_UART2_TXD               SFRS=2;P2MF10&=0x0F;P2MF10|=0x70
 #define    MFP_P21_I2C1_SCL                SFRS=2;P2MF10&=0x0F;P2MF10|=0x90
 #define    MFP_P21_PWM0_CH4                SFRS=2;P2MF10&=0x0F;P2MF10|=0xB0
@@ -1077,26 +1087,32 @@ typedef signed long           int32_t;
 #define    MFP_P22_GPIO                    SFRS=2;P2MF32&=0xF0         /*!<  P2.2 MFP setting for GPIO       */ 
 #define    MFP_P22_ADC_CH3                 SFRS=2;P2MF32&=0xF0;P2MF32|=0x01
 #define    MFP_P22_ACMP1_N0                SFRS=2;P2MF32&=0xF0;P2MF32|=0x01
-#define    MFP_P22_I2C1_SDA                SFRS=2;P2MF32&=0xF0;P2MF32|=0x04
-#define    MFP_P22_LCD_COM3                SFRS=2;P2MF32&=0xF0;P2MF32|=0x05  
-#define    MFP_P22_UART1_RXD               SFRS=2;P2MF32&=0xF0;P2MF32|=0x06   
+#define    MFP_P22_ACMP1_N0                SFRS=2;P2MF32&=0xF0;P2MF32|=0x01
+#define    MFP_P22_PINV                    SFRS=2;P2MF32&=0xF0;P2MF32|=0x03
+#define    MFP_P22_LCD_COM3                SFRS=2;P2MF32&=0xF0;P2MF32|=0x05
+#define    MFP_P22_PBUF                    SFRS=2;P2MF32&=0xF0;P2MF32|=0x07
+#define    MFP_P22_UART1_RXD               SFRS=2;P2MF32&=0xF0;P2MF32|=0x06
 #define    MFP_P22_PWM0_CH3                SFRS=2;P2MF32&=0xF0;P2MF32|=0x0B
 /* P2.3    */  /* Mapping == PB3 */
 #define    MFP_P23_GPIO                    SFRS=2;P2MF32&=0x0F         /*!<  P2.3 MFP setting for GPIO       */ 
-#define    MFP_P23_ADC_CH2                 SFRS=2;P2MF32&=0x0F;P2MF32|=0x10  
+#define    MFP_P23_ADC_CH2                 SFRS=2;P2MF32&=0x0F;P2MF32|=0x10
 #define    MFP_P23_ACMP0_P1                SFRS=2;P2MF32&=0x0F;P2MF32|=0x10
 #define    MFP_P23_ACMP1_P1                SFRS=2;P2MF32&=0x0F;P2MF32|=0x10
+#define    MFP_P23_PINV                    SFRS=2;P2MF32&=0x0F;P2MF32|=0x30
 #define    MFP_P23_I2C1_SCL                SFRS=2;P2MF32&=0x0F;P2MF32|=0x40
 #define    MFP_P23_LCD_COM2                SFRS=2;P2MF32&=0x0F;P2MF32|=0x50
 #define    MFP_P23_UART1_TXD               SFRS=2;P2MF32&=0x0F;P2MF32|=0x60
-#define    MFP_P23_PWM0_CH2                SFRS=2;P2MF32&=0x0F;P2MF32|=0xB0  
+#define    MFP_P23_PUBF                    SFRS=2;P2MF32&=0x0F;P2MF32|=0x70
+#define    MFP_P23_PWM0_CH2                SFRS=2;P2MF32&=0x0F;P2MF32|=0xB0
 #define    MFP_P23_PWM0_BRAKE              SFRS=2;P2MF32&=0x0F;P2MF32|=0xD0
 /* P2.4    */  /* Mapping == PB4 */
 #define    MFP_P24_GPIO                    SFRS=2;P2MF54&=0xF0         /*!<  P2.4 MFP setting for GPIO       */ 
 #define    MFP_P24_ADC_CH1                 SFRS=2;P2MF54&=0xF0;P2MF54|=0x01
 #define    MFP_P24_ACMP0_N0                SFRS=2;P2MF54&=0xF0;P2MF54|=0x01
-#define    MFP_P24_LCD_COM1                SFRS=2;P2MF54&=0xF0;P2MF54|=0x05 
+#define    MFP_P24_PINV                    SFRS=2;P2MF54&=0xF0;P2MF54|=0x03
+#define    MFP_P24_LCD_COM1                SFRS=2;P2MF54&=0xF0;P2MF54|=0x05
 #define    MFP_P24_I2C0_SDA                SFRS=2;P2MF54&=0xF0;P2MF54|=0x06
+#define    MFP_P24_PBUF                    SFRS=2;P2MF54&=0xF0;P2MF54|=0x07
 #define    MFP_P24_PWM0_CH1                SFRS=2;P2MF54&=0xF0;P2MF54|=0x0B
 #define    MFP_P24_UART2_RXD               SFRS=2;P2MF54&=0xF0;P2MF54|=0x0D
 #define    MFP_P24_T1                      SFRS=2;P2MF54&=0xF0;P2MF54|=0x0E
@@ -1106,8 +1122,10 @@ typedef signed long           int32_t;
 #define    MFP_P25_ADC_CH0                 SFRS=2;P2MF54&=0x0F;P2MF54|=0x10
 #define    MFP_P25_ACMP0_P0                SFRS=2;P2MF54&=0x0F;P2MF54|=0x10
 #define    MFP_P25_ACMP1_P0                SFRS=2;P2MF54&=0x0F;P2MF54|=0x10
+#define    MFP_P25_PINV                    SFRS=2;P2MF54&=0x0F;P2MF54|=0x30
 #define    MFP_P25_LCD_COM0                SFRS=2;P2MF54&=0x0F;P2MF54|=0x50
 #define    MFP_P25_I2C0_SCL                SFRS=2;P2MF54&=0x0F;P2MF54|=0x60
+#define    MFP_P25_PBUF                    SFRS=2;P2MF54&=0x0F;P2MF54|=0x70
 #define    MFP_P25_PWM0_CH0                SFRS=2;P2MF54&=0x0F;P2MF54|=0xB0
 #define    MFP_P25_UART2_TXD               SFRS=2;P2MF54&=0x0F;P2MF54|=0xD0
 #define    MFP_P25_T0                      SFRS=2;P2MF54&=0x0F;P2MF54|=0xE0
@@ -1115,8 +1133,8 @@ typedef signed long           int32_t;
 /* P2.6    */  /* Mapping == PB6 */
 #define    MFP_P26_GPIO                    SFRS=2;P2MF76&=0xF0         /*!<  P2.6 MFP setting for GPIO       */ 
 #define    MFP_P26_LCD_SEG6                SFRS=2;P2MF76&=0xF0;P2MF76|=0x02
-#define    MFP_P26_UART1_RXD               SFRS=2;P2MF76&=0xF0;P2MF76|=0x06  
-#define    MFP_P26_PWM3_CH1                SFRS=2;P2MF76&=0xF0;P2MF76|=0x0C   
+#define    MFP_P26_UART1_RXD               SFRS=2;P2MF76&=0xF0;P2MF76|=0x06
+#define    MFP_P26_PWM3_CH1                SFRS=2;P2MF76&=0xF0;P2MF76|=0x0C
 #define    MFP_P26_ACMP1_O                 SFRS=2;P2MF76&=0xF0;P2MF76|=0x0F 
 /* P2.7 */  /* Mapping == PB7 */
 #define    MFP_P27_GPIO                    SFRS=2;P2MF76&=0x0F         /*!<  P2.7 MFP setting for GPIO       */ 
@@ -1130,41 +1148,47 @@ typedef signed long           int32_t;
 /*----- ------ ------ P3 MFP ------ ------ ------*/
 /* P3.0 */ /* Mapping == PB12 */
 #define    MFP_P30_GPIO                    SFRS=2;P3MF10&=0xF0         /*!<  P3.0 MFP setting for GPIO       */  
-#define    MFP_P30_ADC_CH10                SFRS=2;P3MF10&=0xF0;P3MF10|=0x01 
-#define    MFP_P30_LCD_SEG12               SFRS=2;P3MF10&=0xF0;P3MF10|=0x02 
-#define    MFP_P30_SPI1_MOSI               SFRS=2;P3MF10&=0xF0;P3MF10|=0x04 
-#define    MFP_P30_UART0_RXD               SFRS=2;P3MF10&=0xF0;P3MF10|=0x06 
-#define    MFP_P30_PWM2_CH1                SFRS=2;P3MF10&=0xF0;P3MF10|=0x0B 
-#define    MFP_P30_IC0                     SFRS=2;P3MF10&=0xF0;P3MF10|=0x0D 
+#define    MFP_P30_ADC_CH10                SFRS=2;P3MF10&=0xF0;P3MF10|=0x01
+#define    MFP_P30_LCD_SEG12               SFRS=2;P3MF10&=0xF0;P3MF10|=0x02
+#define    MFP_P30_SPI1_MOSI               SFRS=2;P3MF10&=0xF0;P3MF10|=0x04
+#define    MFP_P30_UART0_RXD               SFRS=2;P3MF10&=0xF0;P3MF10|=0x06
+#define    MFP_P30_PWM2_CH1                SFRS=2;P3MF10&=0xF0;P3MF10|=0x0B
+#define    MFP_P30_IC0                     SFRS=2;P3MF10&=0xF0;P3MF10|=0x0D
 /* P3.1    */  /* Mapping == PB13 */
 #define    MFP_P31_GPIO                    SFRS=2;P3MF10&=0x0F         /*!<  P3.1 MFP setting for GPIO       */  
-#define    MFP_P31_ADC_CH6                 SFRS=2;P3MF10&=0x0F;P3MF10|=0x10 
-#define    MFP_P31_ACMP0_P3                SFRS=2;P3MF10&=0x0F;P3MF10|=0x10 
-#define    MFP_P31_ACMP1_P3                SFRS=2;P3MF10&=0x0F;P3MF10|=0x10 
-#define    MFP_P31_LCD_SEG13               SFRS=2;P3MF10&=0x0F;P3MF10|=0x20 
-#define    MFP_P31_SPI1_MISO               SFRS=2;P3MF10&=0x0F;P3MF10|=0x40 
-#define    MFP_P31_UART3_TXD               SFRS=2;P3MF10&=0x0F;P3MF10|=0x50 
-#define    MFP_P31_UART0_TXD               SFRS=2;P3MF10&=0x0F;P3MF10|=0x60 
-#define    MFP_P31_PWM2_CH0                SFRS=2;P3MF10&=0x0F;P3MF10|=0xB0 
-#define    MFP_P31_IC2                     SFRS=2;P3MF10&=0x0F;P3MF10|=0xD0 
+#define    MFP_P31_ADC_CH6                 SFRS=2;P3MF10&=0x0F;P3MF10|=0x10
+#define    MFP_P31_ACMP0_P3                SFRS=2;P3MF10&=0x0F;P3MF10|=0x10
+#define    MFP_P31_ACMP1_P3                SFRS=2;P3MF10&=0x0F;P3MF10|=0x10
+#define    MFP_P31_LCD_SEG13               SFRS=2;P3MF10&=0x0F;P3MF10|=0x20
+#define    MFP_P31_PINV                    SFRS=2;P3MF10&=0x0F;P3MF10|=0x30
+#define    MFP_P31_SPI1_MISO               SFRS=2;P3MF10&=0x0F;P3MF10|=0x40
+#define    MFP_P31_UART3_TXD               SFRS=2;P3MF10&=0x0F;P3MF10|=0x50
+#define    MFP_P31_UART0_TXD               SFRS=2;P3MF10&=0x0F;P3MF10|=0x60
+#define    MFP_P31_PBUF                    SFRS=2;P3MF10&=0x0F;P3MF10|=0x70
+#define    MFP_P31_PWM2_CH0                SFRS=2;P3MF10&=0x0F;P3MF10|=0xB0
+#define    MFP_P31_IC2                     SFRS=2;P3MF10&=0x0F;P3MF10|=0xD0
 /* P3.2    */  /* Mapping == PB14 */
 #define    MFP_P32_GPIO                    SFRS=2;P3MF32&=0xF0         /*!<  P3.2 MFP setting for GPIO       */  
-#define    MFP_P32_ADC_CH7                 SFRS=2;P3MF32&=0xF0;P3MF32|=0x01 
-#define    MFP_P32_ACMP1_N1                SFRS=2;P3MF32&=0xF0;P3MF32|=0x01 
-#define    MFP_P32_LCD_SEG14               SFRS=2;P3MF32&=0xF0;P3MF32|=0x02 
-#define    MFP_P32_SPI1_CLK                SFRS=2;P3MF32&=0xF0;P3MF32|=0x04 
-#define    MFP_P32_UART3_RXD               SFRS=2;P3MF32&=0xF0;P3MF32|=0x05 
-#define    MFP_P32_PWM1_CH1                SFRS=2;P3MF32&=0xF0;P3MF32|=0x0B 
-#define    MFP_P32_IC1                     SFRS=2;P3MF32&=0xF0;P3MF32|=0x0D 
-#define    MFP_P32_CLKO                    SFRS=2;P3MF32&=0xF0;P3MF32|=0x0E 
+#define    MFP_P32_ADC_CH7                 SFRS=2;P3MF32&=0xF0;P3MF32|=0x01
+#define    MFP_P32_ACMP1_N1                SFRS=2;P3MF32&=0xF0;P3MF32|=0x01
+#define    MFP_P32_LCD_SEG14               SFRS=2;P3MF32&=0xF0;P3MF32|=0x02
+#define    MFP_P32_PINV                    SFRS=2;P3MF32&=0xF0;P3MF32|=0x03
+#define    MFP_P32_SPI1_CLK                SFRS=2;P3MF32&=0xF0;P3MF32|=0x04
+#define    MFP_P32_UART3_RXD               SFRS=2;P3MF32&=0xF0;P3MF32|=0x05
+#define    MFP_P32_PBUF                    SFRS=2;P3MF32&=0xF0;P3MF32|=0x07
+#define    MFP_P32_PWM1_CH1                SFRS=2;P3MF32&=0xF0;P3MF32|=0x0B
+#define    MFP_P32_IC1                     SFRS=2;P3MF32&=0xF0;P3MF32|=0x0D
+#define    MFP_P32_CLKO                    SFRS=2;P3MF32&=0xF0;P3MF32|=0x0E
 /* P3.3    */  /* Mapping == PB15 */  
 #define    MFP_P33_GPIO                    SFRS=2;P3MF32&=0x0F          /*!<  P3.3 MFP setting for GPIO       */  
-#define    MFP_P33_LCD_SEG15               SFRS=2;P3MF32&=0x0F;P3MF32|=0x20 
-#define    MFP_P33_SPI1_SS                 SFRS=2;P3MF32&=0x0F;P3MF32|=0x40 
-#define    MFP_P33_LCD_COM1                SFRS=2;P3MF32&=0x0F;P3MF32|=0x50 
-#define    MFP_P33_PWM1_CH0                SFRS=2;P3MF32&=0x0F;P3MF32|=0xB0   
-#define    MFP_P33_IC0                     SFRS=2;P3MF32&=0x0F;P3MF32|=0xD0   
-#define    MFP_P33_PWM0_BRAKE              SFRS=2;P3MF32&=0x0F;P3MF32|=0xE0  
+#define    MFP_P33_LCD_SEG15               SFRS=2;P3MF32&=0x0F;P3MF32|=0x20
+#define    MFP_P33_PINV                    SFRS=2;P3MF32&=0x0F;P3MF32|=0x30
+#define    MFP_P33_SPI1_SS                 SFRS=2;P3MF32&=0x0F;P3MF32|=0x40
+#define    MFP_P33_LCD_COM1                SFRS=2;P3MF32&=0x0F;P3MF32|=0x50
+#define    MFP_P33_PBUF                    SFRS=2;P3MF32&=0x0F;P3MF32|=0x70
+#define    MFP_P33_PWM1_CH0                SFRS=2;P3MF32&=0x0F;P3MF32|=0xB0
+#define    MFP_P33_IC0                     SFRS=2;P3MF32&=0x0F;P3MF32|=0xD0
+#define    MFP_P33_PWM0_BRAKE              SFRS=2;P3MF32&=0x0F;P3MF32|=0xE0
 /*P3.4     */
 #define    MFP_P34_GPIO                    SFRS=2;P3MF54&=0xF0          /*!<  P3.4 MFP setting for GPIO       */  
 #define    MFP_P34_LCD_SEG2                SFRS=2;P3MF54&=0xF0;P3MF54|=0x02 
@@ -1188,22 +1212,24 @@ typedef signed long           int32_t;
 /*-----    ------ ------ P4 MFP ------ ------ ------*/
 /* P4.0    */  /* Mapping == PC0 */                                   
 #define    MFP_P40_GPIO                    SFRS=2;P4MF10&=0xF0         /*!<  P4.0 MFP setting for GPIO       */    
-#define    MFP_P40_LCD_SEG26               SFRS=2;P4MF10&=0xF0;P4MF10|=0x02 
-#define    MFP_P40_LCD_COM3                SFRS=2;P4MF10&=0xF0;P4MF10|=0x05  
-#define    MFP_P40_UART2_RXD               SFRS=2;P4MF10&=0xF0;P4MF10|=0x08  
-#define    MFP_P40_I2C0_SDA                SFRS=2;P4MF10&=0xF0;P4MF10|=0x09 
+#define    MFP_P40_LCD_SEG26               SFRS=2;P4MF10&=0xF0;P4MF10|=0x02
+#define    MFP_P40_LCD_COM3                SFRS=2;P4MF10&=0xF0;P4MF10|=0x05
+#define    MFP_P40_UART2_RXD               SFRS=2;P4MF10&=0xF0;P4MF10|=0x08
+#define    MFP_P40_I2C0_SDA                SFRS=2;P4MF10&=0xF0;P4MF10|=0x09
 #define    MFP_P40_PWM3_CH1                SFRS=2;P4MF10&=0xF0;P4MF10|=0x0C
 #define    MFP_P40_ACMP1_O                 SFRS=2;P4MF10&=0xF0;P4MF10|=0x0E
 #define    MFP_P40_INT1                    SFRS=2;P4MF10&=0xF0;P4MF10|=0x0F
-/* P4.1    */  /* Mapping == PC1 */        
+/* P4.1    */  /* Mapping == PC1 */
 #define    MFP_P41_GPIO                    SFRS=2;P4MF10&=0x0F         /*!<  P4.1 MFP setting for GPIO       */  
-#define    MFP_P41_LCD_SEG27               SFRS=2;P4MF10&=0x0F;P4MF10|=0x20 
-#define    MFP_P41_LCD_COM2                SFRS=2;P4MF10&=0x0F;P4MF10|=0x50 
-#define    MFP_P41_UART2_TXD               SFRS=2;P4MF10&=0x0F;P4MF10|=0x80 
-#define    MFP_P41_I2C0_SCL                SFRS=2;P4MF10&=0x0F;P4MF10|=0x90   
-#define    MFP_P41_PWM3_CH0                SFRS=2;P4MF10&=0x0F;P4MF10|=0xC0 
+#define    MFP_P41_LCD_SEG27               SFRS=2;P4MF10&=0x0F;P4MF10|=0x20
+#define    MFP_P41_PINV                    SFRS=2;P4MF10&=0x0F;P4MF10|=0x30
+#define    MFP_P41_LCD_COM2                SFRS=2;P4MF10&=0x0F;P4MF10|=0x50
+#define    MFP_P41_UART2_TXD               SFRS=2;P4MF10&=0x0F;P4MF10|=0x80
+#define    MFP_P41_I2C0_SCL                SFRS=2;P4MF10&=0x0F;P4MF10|=0x90
+#define    MFP_P41_PWM3_CH0                SFRS=2;P4MF10&=0x0F;P4MF10|=0xC0
+#define    MFP_P41_PBUF                    SFRS=2;P4MF10&=0x0F;P4MF10|=0xB0
 #define    MFP_P41_ACMP0_O                 SFRS=2;P4MF10&=0x0F;P4MF10|=0xE0
-/* P4.2    */  /* Mapping == PC2 */        
+/* P4.2    */  /* Mapping == PC2 */
 #define    MFP_P42_GPIO                    SFRS=2;P4MF32&=0xF0         /*!<  P4.2 MFP setting for GPIO       */  
 #define    MFP_P42_LCD_SEG28               SFRS=2;P4MF32&=0xF0;P4MF32|=0x02 
 #define    MFP_P42_LCD_COM7                SFRS=2;P4MF32&=0xF0;P4MF32|=0x05 
@@ -1252,46 +1278,56 @@ typedef signed long           int32_t;
 #define    MFP_P50_I2C1_SCL                SFRS=2;P5MF10&=0xF0;P5MF10|=0x03   
 #define    MFP_P50_UART0_TXD               SFRS=2;P5MF10&=0xF0;P5MF10|=0x04    
 #define    MFP_P50_ICE_DAT                 SFRS=2;P5MF10&=0xF0;P5MF10|=0x0E 
-                                           
+
 /* P5.1    */  /* Mapping == PF1 */        
 #define    MFP_P51_GPIO                    SFRS=2;P5MF10&=0x0F         /*!<  P5.1 MFP setting for GPIO       */  
-#define    MFP_P51_UART1_RXD               SFRS=2;P5MF10&=0x0F;P5MF10|=0x20   
-#define    MFP_P51_I2C1_SDA                SFRS=2;P5MF10&=0x0F;P5MF10|=0x30 
-#define    MFP_P51_UART0_RXD               SFRS=2;P5MF10&=0x0F;P5MF10|=0x40   
-#define    MFP_P51_ICE_CLK                 SFRS=2;P5MF10&=0x0F;P5MF10|=0xE0 
+#define    MFP_P51_PINV                    SFRS=2;P5MF10&=0x0F;P5MF10|=0x10
+#define    MFP_P51_UART1_RXD               SFRS=2;P5MF10&=0x0F;P5MF10|=0x20
+#define    MFP_P51_I2C1_SDA                SFRS=2;P5MF10&=0x0F;P5MF10|=0x30
+#define    MFP_P51_UART0_RXD               SFRS=2;P5MF10&=0x0F;P5MF10|=0x40
+#define    MFP_P51_PBUF                    SFRS=2;P5MF10&=0x0F;P5MF10|=0x70
+#define    MFP_P51_ICE_CLK                 SFRS=2;P5MF10&=0x0F;P5MF10|=0xE0
                                            
 /* P5.2    */  /* Mapping == PF2 */        
 #define    MFP_P52_GPIO                    SFRS=2;P5MF32&=0xF0         /*!<  P5.2 MFP setting for GPIO       */  
-#define    MFP_P52_UART0_RXD               SFRS=2;P5MF32&=0xF0;P5MF32|=0x03   
-#define    MFP_P52_I2C0_SDA                SFRS=2;P5MF32&=0xF0;P5MF32|=0x04   
-#define    MFP_P52_XT1_OUT                 SFRS=2;P5MF32&=0xF0;P5MF32|=0x0A    
-                                           
+#define    MFP_P52_PINV                    SFRS=2;P5MF32&=0xF0;P5MF32|=0x01
+#define    MFP_P52_UART0_RXD               SFRS=2;P5MF32&=0xF0;P5MF32|=0x03
+#define    MFP_P52_I2C0_SDA                SFRS=2;P5MF32&=0xF0;P5MF32|=0x04
+#define    MFP_P52_PBUF                    SFRS=2;P5MF32&=0xF0;P5MF32|=0x09
+#define    MFP_P52_XT1_OUT                 SFRS=2;P5MF32&=0xF0;P5MF32|=0x0A
+
 /* P5.3    */  /* Mapping == PF3 */        
 #define    MFP_P53_GPIO                    SFRS=2;P5MF32&=0x0F         /*!<  P5.3 MFP setting for GPIO       */  
-#define    MFP_P53_UART0_TXD               SFRS=2;P5MF32&=0x0F;P5MF32|=0x30   
-#define    MFP_P53_I2C0_SCL                SFRS=2;P5MF32&=0x0F;P5MF32|=0x40 
-#define    MFP_P53_XT1_IN                  SFRS=2;P5MF32&=0x0F;P5MF32|=0xA0 
-                                           
+#define    MFP_P53_PINV                    SFRS=2;P5MF32&=0x0F;P5MF32|=0x10
+#define    MFP_P53_UART0_TXD               SFRS=2;P5MF32&=0x0F;P5MF32|=0x30
+#define    MFP_P53_I2C0_SCL                SFRS=2;P5MF32&=0x0F;P5MF32|=0x40
+#define    MFP_P53_PBUF                    SFRS=2;P5MF32&=0x0F;P5MF32|=0x90
+#define    MFP_P53_XT1_IN                  SFRS=2;P5MF32&=0x0F;P5MF32|=0xA0
+
 /* P5.4    */  /* Mapping == PF4 */        
 #define    MFP_P54_GPIO                    SFRS=2;P5MF54&=0xF0         /*!<  P5.4 MFP setting for GPIO       */  
-#define    MFP_P54_UART2_TXD               SFRS=2;P5MF54&=0xF0;P5MF54|=0x02    
-#define    MFP_P54_PWM0_CH1                SFRS=2;P5MF54&=0xF0;P5MF54|=0x07   
-#define    MFP_P54_X32_OUT                 SFRS=2;P5MF54&=0xF0;P5MF54|=0x0A 
-                                           
+#define    MFP_P54_PINV                    SFRS=2;P5MF54&=0xF0;P5MF54|=0x01
+#define    MFP_P54_UART2_TXD               SFRS=2;P5MF54&=0xF0;P5MF54|=0x02
+#define    MFP_P54_PWM0_CH1                SFRS=2;P5MF54&=0xF0;P5MF54|=0x07
+#define    MFP_P54_PBUF                    SFRS=2;P5MF54&=0xF0;P5MF54|=0x09
+#define    MFP_P54_X32_OUT                 SFRS=2;P5MF54&=0xF0;P5MF54|=0x0A
+
 /* P5.5    */  /* Mapping == PF5 */        
 #define    MFP_P55_GPIO                    SFRS=2;P5MF54&=0x0F         /*!<  P5.5 MFP setting for GPIO       */  
-#define    MFP_P55_UART2_RXD               SFRS=2;P5MF54&=0x0F;P5MF54|=0x20   
-#define    MFP_P55_PWM0_CH0                SFRS=2;P5MF54&=0x0F;P5MF54|=0x70 
-#define    MFP_P55_X32_IN                  SFRS=2;P5MF54&=0x0F;P5MF54|=0xA0 
-#define    MFP_P55_STADC                   SFRS=2;P5MF54&=0x0F;P5MF54|=0xB0 
-                                           
+#define    MFP_P55_PINV                    SFRS=2;P5MF54&=0x0F;P5MF54|=0x10
+#define    MFP_P55_UART2_RXD               SFRS=2;P5MF54&=0x0F;P5MF54|=0x20
+#define    MFP_P55_PWM0_CH0                SFRS=2;P5MF54&=0x0F;P5MF54|=0x70
+#define    MFP_P55_PBUF                    SFRS=2;P5MF54&=0x0F;P5MF54|=0x90
+#define    MFP_P55_X32_IN                  SFRS=2;P5MF54&=0x0F;P5MF54|=0xA0
+#define    MFP_P55_STADC                   SFRS=2;P5MF54&=0x0F;P5MF54|=0xB0
+
 /* P5.6    */  /* Mapping == PF15 */       
 #define    MFP_P56_GPIO                    SFRS=2;P5MF76&=0xF0         /*!<  P5.6 MFP setting for GPIO       */  
 #define    MFP_P56_TK0                     SFRS=2;P5MF76&=0xF0;P5MF76|=0x0A  
 #define    MFP_P56_PWM0_BRAKE              SFRS=2;P5MF76&=0xF0;P5MF76|=0x0B   
 #define    MFP_P56_PWM0_CH1                SFRS=2;P5MF76&=0xF0;P5MF76|=0x0C   
 #define    MFP_P56_CLKO                    SFRS=2;P5MF76&=0xF0;P5MF76|=0x0E 
-                                           
+
 /* P5.7    */  /* Mapping == PF14 */       
 #define    MFP_P57_GPIO                    SFRS=2;P5MF76&=0x0F         /*!<  P5.7 MFP setting for GPIO      */  
 #define    MFP_P57_PWM0_BRAKE              SFRS=2;P5MF76&=0x0F;P5MF76|=0xA0  
