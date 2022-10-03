@@ -202,15 +202,15 @@ END_2:
               READ_CONFIG();
               
               Package_checksum();
-              uart_txbuf[8]=CONF0;  
-              uart_txbuf[9]=CONF1;  
-              uart_txbuf[10]=CONF2;  
-              uart_txbuf[11]=0xff;  
-              uart_txbuf[12]=CONF4;  
-              uart_txbuf[13]=0xff;  
-              uart_txbuf[14]=0xff;            
+              uart_txbuf[8]=CONF0;
+              uart_txbuf[9]=CONF1;
+              uart_txbuf[10]=CONF2;
+              uart_txbuf[11]=0xff;
+              uart_txbuf[12]=CONF4;
+              uart_txbuf[13]=0xff;
+              uart_txbuf[14]=0xff;
               uart_txbuf[15]=0xff;
-              Send_64byte_To_UART1();  
+              Send_64byte_To_UART1();
               break;
             }
             

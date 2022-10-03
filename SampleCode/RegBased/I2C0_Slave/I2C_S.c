@@ -14,13 +14,13 @@
 
 
 //***********************************************************************************************************
-//  ML51-series I2C slave mode demo code, the Slave address = 0xA4
+//  MUG51-series I2C slave mode demo code, the Slave address = 0xA4
 //
 //   ____________            _____________ 
 //  |            |   SDA    |             |
 //  |            |<-------->|             |
 //  |            |          |             |
-//  |ML51(M)     |          | ML51(S)     |
+//  |MUG51(M)     |          | MUG51(S)     |
 //  |(I2C_Master)|          | (I2C_Slave) |
 //  |            |   SCL    |             |
 //  |            |--------->|             |

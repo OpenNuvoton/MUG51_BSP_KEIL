@@ -422,7 +422,7 @@ void main(void)
 
     /* ==== Test Pass ==== */      
 #ifdef print_function
-    printf ("\n\ML51 <--> 24LC64, I2C Demo Code test pass...");
+    printf ("\n\MUG51 <--> 24LC64, I2C Demo Code test pass...");
 #endif
 
     while (1);

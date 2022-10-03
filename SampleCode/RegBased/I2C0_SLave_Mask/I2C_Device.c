@@ -6,7 +6,7 @@
 /*---------------------------------------------------------------------------------------------------------*/
 
 //***********************************************************************************************************
-//  File Function: N76E003 I2C Slave demo code
+//  File Function: MUG51 I2C Slave demo code
 //***********************************************************************************************************
 
 #include "MUG51.h"
@@ -19,7 +19,7 @@
 //  |            |   SDA    |             |
 //  |            |<-------->|             |
 //  |            |          |             |
-//  |  HOST      |          | ML51(S)     |
+//  |  HOST      |          | MUG51(S)     |
 //  |(I2C_Master)|          | (I2C_Slave) |
 //  |            |   SCL    |             |
 //  |            |--------->|             |
@@ -28,7 +28,7 @@
 //  The protocol of I2C is same the "24LC64"
 //***********************************************************************************************************
 #define EEPROM_SLA_GPIO_HOST  0x80
-#define EEPROM_SLA_ML51_SLAVE  0x80
+#define EEPROM_SLA_MUG51_SLAVE  0x80
 
 #define I2C_CLOCK               13
 
@@ -145,9 +145,9 @@ void Init_I2C(void)
     set_EIE0_EI2C0;                                 //enable I2C interrupt by setting IE1 bit 0
     set_IE_EA;
 
-    I2C0ADDR0 = EEPROM_SLA_ML51_SLAVE;              //define own slave address
+    I2C0ADDR0 = EEPROM_SLA_MUG51_SLAVE;              //define own slave address
 
-    I2C_SLAVE_ADDRESS_MASK_ENABLE(I2C0,0X0E);
+    I2C_SetSlaveAddrMask(I2C0,0,0x0E);
     set_I2C0CON_I2CEN;                              //enable I2C circuit
     set_I2C0CON_AA;
 

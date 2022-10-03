@@ -21,8 +21,7 @@
 #define BYTE_READ_CONFIG     0xC0
 #define BYTE_PROGRAM_CONFIG  0xE1
 #define READ_UID             0x04
-#define PAGE_SIZE            128UL
-#define APROM_SIZE           62UL*1024UL
+#define APROM_SIZE           14UL*1024UL
 
 extern  xdata volatile uint8_t uart_rcvbuf[64]; 
 extern  xdata volatile uint8_t uart_txbuf[64];
@@ -42,10 +41,8 @@ extern unsigned char PID_highB,PID_lowB,DID_highB,DID_lowB,CONF0,CONF1,CONF2,CON
 extern unsigned char recv_CONF0,recv_CONF1,recv_CONF2,recv_CONF4;
 
 
-void MODIFY_HIRC_24(void);
-void MODIFY_HIRC_16(void);
 void TM0_ini(void);
-void UART0_ini_115200_24MHz(void);
+void UART0_ini_115200_7_3728Hz(void);
 void Send_64byte_To_UART0(void);
 void READ_ID(void);
 void READ_CONFIG(void);

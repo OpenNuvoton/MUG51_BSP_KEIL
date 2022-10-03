@@ -11,6 +11,7 @@
 #include "MUG51.h"
 #include "isp_uart0.h"
 
+
 xdata volatile uint8_t uart_rcvbuf[64];
 xdata volatile uint8_t uart_txbuf[64];
 data volatile uint8_t bufhead;
@@ -35,16 +36,25 @@ void READ_ID(void)
     IAPCN = READ_DID;
     IAPAH = 0x00;
     IAPAL = 0x00;
-    set_IAPTRG_IAPGO;
+//    set_IAPTRG_IAPGO;
+    SFRS=0;BIT_TMP=EA;EA=0;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01;
     DID_lowB = IAPFD;
-    IAPAL = 0x01;
-    set_IAPTRG_IAPGO;
+//    IAPAL = 0x01;
+//    set_IAPTRG_IAPGO;
+    IAPAL++;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01; 
     DID_highB = IAPFD;
-    IAPAL = 0x02;
-    set_IAPTRG_IAPGO;
+//    IAPAL = 0x02;
+//    set_IAPTRG_IAPGO;
+    IAPAL++;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01;
     PID_lowB = IAPFD;
-    IAPAL = 0x03;
-    set_IAPTRG_IAPGO;
+//    IAPAL = 0x03;
+//    set_IAPTRG_IAPGO;
+    IAPAL++;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01;
+    EA=BIT_TMP;
     PID_highB = IAPFD;
 }
 void READ_CONFIG(void)
@@ -54,41 +64,49 @@ void READ_CONFIG(void)
     IAPAH = 0x00;
     set_IAPTRG_IAPGO;
     CONF0 = IAPFD;
-    IAPAL = 0x01;
-    set_IAPTRG_IAPGO;
+//    IAPAL = 0x01;
+//    set_IAPTRG_IAPGO;
+    IAPAL++;
+    SFRS=0;BIT_TMP=EA;EA=0;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01;
     CONF1 = IAPFD;
-    IAPAL = 0x02;
-    set_IAPTRG_IAPGO;
+//    IAPAL = 0x02;
+//    set_IAPTRG_IAPGO;
+    IAPAL++;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01;
     CONF2 = IAPFD;
     IAPAL = 0x04;
-    set_IAPTRG_IAPGO;
+//    set_IAPTRG_IAPGO;
+    TA=0xAA;TA=0x55;IAPTRG|=0x01;
     CONF4 = IAPFD;
 //    clr_CHPCON_IAPEN;
 }
 
 void TM0_ini(void)
 {
-    TH0 = TL0 = 0;     //interrupt timer 140us
+    TH0 = TL0 = 150;     //interrupt timer 140us
     set_TCON_TR0;      //Start timer0
     set_IPH_PSH;       // Serial port 0 interrupt level2
     set_IE_ET0;
 }
 
 
-void UART0_ini_115200_7.3728MHz(void)
+void UART0_ini_115200_7_3728Hz(void)
 {
     MFP_P31_UART0_TXD;                              /* set P2.3 and P2.2 as Quasi mode for UART0 trasnfer */
     MFP_P30_UART0_RXD;
+//	  SFRS=2;P3MF10=0x66;
     P31_QUASI_MODE;
     P30_QUASI_MODE;
-  
+//		SFRS=1;P3M1=0xFC;P3M2=0x00;
+
     SFRS = 0x00;
     SCON = 0x50;            /*UART0 Mode1,REN=1,TI=1*/
     set_PCON_SMOD;          /*UART0 Double Rate Enable*/
-    T3CON &= 0xF8;           /*T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1)*/
-    set_T3CON_BRCK;          /*UART0 baud rate clock source = Timer3*/
-    RH3    = 0xFF;   /* HIBYTE(65536 - 13)*/
-    RL3    = 0xF3;   /* LOBYTE(65536 - 13); */
+    T3CON &= 0xF8;          /*T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1)*/
+    set_T3CON_BRCK;         /*UART0 baud rate clock source = Timer3*/
+    RH3    = 0xFF;          /* HIBYTE(65536 - 13)*/
+    RL3    = 0xFC;          /* LOBYTE(65536 - 13); */
     set_T3CON_TR3;          /*Trigger Timer3*/
     ES=1;
     EA=1;
@@ -116,7 +134,7 @@ void Package_checksum(void)
 
 void Send_64byte_To_UART0(void)
 {
-_push_(SFRS);
+//_push_(SFRS);
     SFRS = 0;
     for (count = 0; count < 64; count++)
     {
@@ -125,7 +143,7 @@ _push_(SFRS);
         set_WDCON_WDCLR;
         while (TI == 0);
     }
-_pop_(SFRS);
+//_pop_(SFRS);
 }
 
 void Serial_ISR(void) interrupt 4
@@ -147,7 +165,6 @@ void Serial_ISR(void) interrupt 4
     }
   if(bufhead == 64)
     {
-      
       bUartDataReady = TRUE;
       g_timer1Counter=0;
       g_timer1Over=0;
@@ -157,7 +174,7 @@ void Serial_ISR(void) interrupt 4
 
 void Timer0_ISR(void) interrupt 1
 {
-    _push_(SFRS);
+//    _push_(SFRS);
 //    if (g_timer0Counter)
     if (!g_timer0Over)
     {
@@ -175,5 +192,5 @@ void Timer0_ISR(void) interrupt 1
             g_timer1Over = 1;
         }
     }
-    _pop_(SFRS);
+//    _pop_(SFRS);
 }

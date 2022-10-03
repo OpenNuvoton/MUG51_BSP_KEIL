@@ -1,0 +1,251 @@
+C51 COMPILER V9.60.0.0   UART                                                              10/03/2022 14:33:42 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN .\Output\uart.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\..\..\Library\StdDriver\src\uart.c LARGE OMF2 OPTIMIZE(7,SPEED) BR
+                    -OWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\List\uart.lst) TABS(2) O
+                    -BJECT(.\Output\uart.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* SPDX-License-Identifier: Apache-2.0                                                                    
+             - */
+   4          /* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   5          /*                                                                                                        
+             - */
+   6          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   7          
+   8          #include "MUG51.h"
+   9          
+  10          
+  11          bit UART0PRINTFG=0,UART1PRINTFG=0, uart0_receive_flag = 0, uart1_receive_flag;
+  12          unsigned char uart0_receive_data, uart1_receive_data;
+  13          
+  14          
+  15          void Enable_P31_UART0_VCOM_115200_printf(void)
+  16          {
+  17   1        /* UART0 initial setting
+  18   1        ** include uart.c in Library for UART initial setting
+  19   1        **UART0 define P3.1 TXD multi function setting
+  20   1        **/
+  21   1          MFP_P31_UART0_TXD;
+  22   1          P31_QUASI_MODE;
+  23   1          UART_Open(FSYSCLK,UART0_Timer3,115200);
+  24   1          ENABLE_UART0_PRINTF;
+  25   1      }
+  26          
+  27          void Enable_P31_UART0_VCOM_38400_printf(void)
+  28          {
+  29   1        /* UART0 initial setting
+  30   1        ** include uart.c in Library for UART initial setting
+  31   1        **UART0 define P3.1 TXD multi function setting
+  32   1        **/
+  33   1          MFP_P31_UART0_TXD;
+  34   1          P31_QUASI_MODE;
+  35   1          UART_Open(FSYSCLK,UART0_Timer3,38400);
+  36   1          ENABLE_UART0_PRINTF;
+  37   1      }
+  38          
+  39           #if 0
+              /* UART0 interrupt subroutine */
+              /**
+               * @brief       UART0 interrupt subroutine
+               * @param       UART0~3, baudrate value
+               * @return      none
+               * @details     none
+               * @note        Since printf function TI must be 1. Check with printf flag, for printf enable, not clear T
+             -I . 
+C51 COMPILER V9.60.0.0   UART                                                              10/03/2022 14:33:42 PAGE 2   
+
+               */
+              void UART0_ISR(void) interrupt 4
+              {
+                  _push_(SFRS);
+                  if (RI)
+                  {
+                      uart0_receive_flag = 1;
+                      uart0_receive_data = SBUF;
+                      clr_SCON_RI;                                         // Clear RI (Receive Interrupt).
+                  }
+                  if (TI)
+                  {
+              //        if (!UART0PRINTFG)
+              //            TI = 0;
+                  }
+                  _pop_(SFRS);
+              }
+              #endif
+  65          
+  66          /* UART1 interrupt subroutine */
+  67          void UART1_ISR(void) interrupt 15
+  68          {
+  69   1          _push_(SFRS);
+  70   1          if (RI_1)
+  71   1          {
+  72   2              uart1_receive_flag = 1;
+  73   2              uart1_receive_data = SBUF1;
+  74   2              RI_1=0;                             /* clear reception flag for next reception */
+  75   2          }
+  76   1          if (TI_1)
+  77   1              if (!UART1PRINTFG)
+  78   1                  TI_1 = 0;                       /* if emission occur */
+  79   1          _pop_(SFRS);
+  80   1      }
+  81          
+  82          /**
+  83           * @brief       UART no interrupt enable setting 
+  84           * @param       UART0~3, baudrate value
+  85           * @return      none
+  86           * @details     none
+  87           * @note        max baud rate = 230400 when Fsys = 7.3728MHz
+  88           */
+  89          //********************************************************************************************************
+             -********  
+  90          //**** UART Enable Setting  
+  91          //**** 1. Define Fsys value(value)
+  92          //**** 2. Select UART port(UART0_Timer1 / UART0_Timer3 / UART1_Timer3 / UART2/UART3) 
+  93          //**** 3. Define baudrate (value)
+  94          //**** For example: UART_Open(FSYSCLK,UART0_Timer3,115200)
+  95          void UART_Open(unsigned long u32SysClock, unsigned char u8UARTPort,unsigned long u32Baudrate)
+  96          {
+  97   1        switch(u8UARTPort)
+  98   1        {
+  99   2            case UART0_Timer1:
+ 100   2            case UART0:
+ 101   2                SFRS = 0x00;
+ 102   2                SCON = 0x50;             /*UART0 Mode1,REN=1,TI=1 */
+ 103   2                TMOD |= 0x20;            /*Timer1 Mode1*/
+ 104   2                set_PCON_SMOD;          /*UART0 Double Rate Enable*/
+ 105   2                set_CKCON_T1M;
+ 106   2                clr_T3CON_BRCK;          /*Serial port 0 baud rate clock source = Timer1*/
+ 107   2                TH1 = 256 - (u32SysClock/16/u32Baudrate);
+C51 COMPILER V9.60.0.0   UART                                                              10/03/2022 14:33:42 PAGE 3   
+
+ 108   2                set_TCON_TR1;
+ 109   2            break;
+ 110   2            case UART0_Timer3:
+ 111   2                SFRS = 0x00;
+ 112   2                SCON = 0x50;            /*UART0 Mode1,REN=1,TI=1*/
+ 113   2                set_PCON_SMOD;          /*UART0 Double Rate Enable*/
+ 114   2                T3CON &= 0xF8;          /*T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1)*/
+ 115   2                set_T3CON_BRCK;         /*UART0 baud rate clock source = Timer3*/
+ 116   2                RH3    = HIBYTE(65536 - (u32SysClock/16/u32Baudrate));
+ 117   2                RL3    = LOBYTE(65536 - (u32SysClock/16/u32Baudrate));
+ 118   2                set_T3CON_TR3;          /*Trigger Timer3*/
+ 119   2            break;
+ 120   2            case UART1_Timer3:
+ 121   2            case UART1:
+ 122   2                SFRS = 0x00;
+ 123   2                S1CON = 0x50;           /*UART1 Mode1,REN_1=1 */
+ 124   2                T3CON = 0x88;           /*T3PS2=0,T3PS1=0,T3PS0=0(Prescale=1), UART1 in MODE 1*/
+ 125   2                RH3    = HIBYTE(65536 - (u32SysClock/16/u32Baudrate));
+ 126   2                RL3    = LOBYTE(65536 - (u32SysClock/16/u32Baudrate));
+ 127   2                set_T3CON_TR3;          /* Trigger Timer3 */
+ 128   2            break; 
+ 129   2      
+ 130   2        }
+ 131   1      }
+ 132          //********************************************************************************************************
+             -********  
+ 133          //**** UART Receive data without interrupt  
+ 134          //**** For example: UART_Open(UART0_Timer1,1200)
+ 135          unsigned char UART_Receive_Data(unsigned char UARTPort)
+ 136          {
+ 137   1          unsigned char c;
+ 138   1          SFRS = 0x00;
+ 139   1          switch (UARTPort)
+ 140   1          {
+ 141   2            case UART0:
+ 142   2              while (!RI);
+ 143   2              c = SBUF;
+ 144   2              RI = 0;
+ 145   2            break;
+ 146   2            case UART1:
+ 147   2              while (!RI_1);
+ 148   2              c = SBUF1;
+ 149   2              RI_1 = 0;
+ 150   2            break;
+ 151   2          }
+ 152   1          return (c);
+ 153   1      }
+ 154          //********************************************************************************************************
+             -********  
+ 155          //**** UART transfer data without interrupt  
+ 156          //**** For example: UART_Send_Data(UART0,0x55)
+ 157          void UART_Send_Data(unsigned char UARTPort, unsigned char c)
+ 158          {
+ 159   1          SFRS = 0x00;
+ 160   1          switch (UARTPort)
+ 161   1          {
+ 162   2            case UART0:
+ 163   2              TI = 0;
+ 164   2              SBUF = c;
+ 165   2              while(TI==0);
+ 166   2              TI = 0;
+ 167   2            break;
+C51 COMPILER V9.60.0.0   UART                                                              10/03/2022 14:33:42 PAGE 4   
+
+ 168   2            case UART1:
+ 169   2              TI_1 = 0;
+ 170   2              SBUF1 = c;
+ 171   2              while(TI_1==0);
+ 172   2              TI_1 = 0;
+ 173   2            break;
+ 174   2          }
+ 175   1      }
+ 176          
+ 177          
+ 178          /**
+ 179           * @brief       UART interrupt enable setting 
+ 180           * @param       u8UARTPort: UART0/UART1/UART2/UART3 baudrate value
+ 181           * @param       u8UARTINTStatus: Disable/Enable
+ 182           * @return      none
+ 183           * @details     none
+ 184           * @note        max baud rate =  230400 when Fsys = 7.3728MHz
+ 185           */
+ 186          void UART_Interrupt_Enable(unsigned char u8UARTPort, unsigned char u8UARTINTStatus)
+ 187          {
+ 188   1          switch (u8UARTPort)
+ 189   1          {
+ 190   2              case UART0: 
+ 191   2                switch(u8UARTINTStatus)
+ 192   2                {
+ 193   3                  case Disable: clr_IE_ES; break;
+ 194   3                  case Enable:  set_IE_ES; break;
+ 195   3                }
+ 196   2              break;
+ 197   2              case UART1:
+ 198   2                switch(u8UARTINTStatus)
+ 199   2                {
+ 200   3                  case Disable: clr_EIE1_ES1; break;
+ 201   3                  case Enable:  set_EIE1_ES1; break;
+ 202   3                }
+ 203   2              break;
+ 204   2          }
+ 205   1      }
+ 206           
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    628    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      2       9
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      4    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

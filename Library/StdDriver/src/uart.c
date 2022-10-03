@@ -7,7 +7,6 @@
 
 #include "MUG51.h"
 
-#define FSYSCLK  7372800
 
 bit UART0PRINTFG=0,UART1PRINTFG=0, uart0_receive_flag = 0, uart1_receive_flag;
 unsigned char uart0_receive_data, uart1_receive_data;
@@ -36,8 +35,9 @@ void Enable_P31_UART0_VCOM_38400_printf(void)
     UART_Open(FSYSCLK,UART0_Timer3,38400);
     ENABLE_UART0_PRINTF;
 }
-/* UART0 interrupt subroutine */
 
+ #if 0
+/* UART0 interrupt subroutine */
 /**
  * @brief       UART0 interrupt subroutine
  * @param       UART0~3, baudrate value
@@ -61,7 +61,7 @@ void UART0_ISR(void) interrupt 4
     }
     _pop_(SFRS);
 }
-
+#endif
 
 /* UART1 interrupt subroutine */
 void UART1_ISR(void) interrupt 15
@@ -91,7 +91,7 @@ void UART1_ISR(void) interrupt 15
 //**** 1. Define Fsys value(value)
 //**** 2. Select UART port(UART0_Timer1 / UART0_Timer3 / UART1_Timer3 / UART2/UART3) 
 //**** 3. Define baudrate (value)
-//**** For example: UART_Open(7372800,UART0_Timer3,115200)
+//**** For example: UART_Open(FSYSCLK,UART0_Timer3,115200)
 void UART_Open(unsigned long u32SysClock, unsigned char u8UARTPort,unsigned long u32Baudrate)
 {
   switch(u8UARTPort)
@@ -203,5 +203,4 @@ void UART_Interrupt_Enable(unsigned char u8UARTPort, unsigned char u8UARTINTStat
         break;
     }
 }
-
-
+ 

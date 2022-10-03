@@ -10,6 +10,7 @@
 //***********************************************************************************************************
 #include "MUG51.h"
 
+unsigned char PinIntFlag;
 /* IMPORTANT !! This define for printf code only. Disable this define to reduce code size. */
 /******************************************************************************
 Pin interrupt subroutine.
@@ -17,16 +18,15 @@ Pin interrupt subroutine.
 void PinInterrupt_ISR (void) interrupt 7
 {
     _push_(SFRS);
-  
+
     SFRS = 0;
     switch(PIF)
     {
-      case 0x01: printf("\n PIT0 interrupt!"); break;
-      case 0x02: printf("\n PIT1 interrupt!"); break;
+      case (SET_BIT0): PinIntFlag = SET_BIT0; PIF&=CLR_BIT0; break;
+      case (SET_BIT2): PinIntFlag = SET_BIT2; PIF&=CLR_BIT2; break;
       default: break;
     }
-    PIF = 0; 
-  
+
     _pop_(SFRS);
 }
 /******************************************************************************
@@ -40,7 +40,7 @@ void main (void)
   **UART0 define P3.1 TXD multi function setting
   **/
   Enable_P31_UART0_VCOM_115200_printf();
-
+  printf("\n PIT test start!");
 //----------------------------------------------------
 //  P1.3 set as highlevel trig pin interrupt function
 //  otherwise, MCU into idle mode.
@@ -53,13 +53,19 @@ void main (void)
     GPIO_SetMode(Port2,BIT5,GPIO_MODE_INPUT);
     GPIO_Pull_Enable(Port1,BIT7,PULLUP);
     GPIO_Pull_Enable(Port2,BIT5,PULLDOWN);
-    GPIO_EnableInt(PIT0,BOTH,EDGE,Port1,7);
-    GPIO_EnableInt(PIT1,HIGH,LEVEL,Port2,5);
+    GPIO_EnableInt(PIT0,FALLING,EDGE,Port1,7);
+    GPIO_EnableInt(PIT2,HIGH,LEVEL,Port2,5);
 
     ENABLE_GLOBAL_INTERRUPT;                // global enable bit
-    while(1);
-
-
+    while(1)
+    {
+      switch(PinIntFlag)
+      {
+        case (SET_BIT0): printf("\n PIT0 interrupt!"); PinIntFlag&=CLR_BIT0; break;
+        case (SET_BIT2): printf("\n PIT2 interrupt!"); PinIntFlag&=CLR_BIT2;break;
+        default: break;
+      }
+    }
 }
 
 

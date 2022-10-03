@@ -13,7 +13,7 @@
   \mainpage Introduction
   *
   *
-  * This user manual describes the usage of ML51 device driver
+  * This user manual describes the usage of MUG51 device driver
   *
   * <b>Disclaimer</b>
   *
@@ -29,8 +29,8 @@
   */
 
 
-#ifndef __ML51_H__
-#define __ML51_H__
+#ifndef __MUG51_H__
+#define __MUG51_H__
 
 /******************************************************************************/
 #include <intrins.h>
@@ -12021,7 +12021,7 @@ sfr DMA1CRC = 0x93;
 
 /**
 @var PDL
-Address: 97H, SFR Page 3
+Address: 8FH, SFR Page 3
 ---------------------------------------------------------------------------------------------------
 |Bits    |Name      |Descriptions
 | :----: | :----:   | :---- |
@@ -12031,7 +12031,7 @@ Address: 97H, SFR Page 3
 |        |          |10 = Power Down Level 2
 |        |          |Others = Reserved.
 */
-sfr PDL = 0x97;
+sfr PDL = 0x8F;
 
 /**@} end of SFR_PAGE3_PDL group */
 
@@ -18807,4 +18807,4 @@ sbit RB8_1      = S1CON^2;
 sbit TI_1       = S1CON^1;
 sbit RI_1       = S1CON^0;
 
-#endif  /* __ML51_H__ */
+#endif  /* __MUG51_H__ */

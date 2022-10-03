@@ -27,7 +27,7 @@ void main (void)
     MFP_P22_UART1_RXD;
     P22_INPUT_MODE;
 
-    UART_Open(7372800,UART1_Timer3,115200);
+    UART_Open(FSYSCLK,UART1_Timer3,115200);
     ENABLE_UART1_INTERRUPT;                 //For interrupt enable , interrupt subroutine is in uart.c file
     ENABLE_GLOBAL_INTERRUPT;                //Enable global interrupt
 

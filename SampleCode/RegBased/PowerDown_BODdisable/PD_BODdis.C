@@ -35,6 +35,8 @@ void main (void)
     P3 = ~P3;
     _delay_();
   }
+
+  PowerDown_Level(1);
 /* Real into power down mode */
   set_PCON_PD;
   while(1);

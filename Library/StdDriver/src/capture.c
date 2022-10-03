@@ -11,11 +11,11 @@
  * @brief       Timer 2 capture setting 
  * @param       u8CAPChannel input capture Channel select (IC0/IC1/IC2)
  * @param       u8CAPSource input capture each Channel source select (IC_GPIO/ACMP0_O/ACMP1_O) 
- * @param       u8CAPLevel input level select  (CaptureFalling/CaptureRising/CaptureEither)
+ * @param       u8CAPLevel input level select  (CAPTUREFALLING/CAPTURERISING/CAPTUREEITHER)
  * @param       u8TM2DIV reload counter divider select(0~7 = DIV 1/4/16/32/64/128/256/512.) 
  * @return      none
  * @details     none
- * @example     TIMER2_Capture(IC0,IC_GPIO,CaptureRising,7);
+ * @example     TIMER2_Capture(IC0,IC_GPIO,CAPTURERISING,7);
  */
 void TIMER2_Capture(unsigned char u8CAPChannel, unsigned char u8CAPSource, unsigned char u8CAPLevel, unsigned char u8TM2DIV)
 {

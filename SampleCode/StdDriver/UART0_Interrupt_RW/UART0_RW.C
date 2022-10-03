@@ -10,10 +10,9 @@
 /***********************************************************************************************************/
 #include "MUG51.h"
 
-#define  FSYSCLK  7372800
 
-#define  UART0_RXTX_loop
-//#define  UART0_TX_only
+//#define  UART0_RXTX_loop
+#define  UART0_TX_only
 /************************************************************************************************************/
 /*  Main function                                                                                           */
 /************************************************************************************************************/
@@ -33,8 +32,9 @@
 #if defined UART0_TX_only
     while (1)
     {
-      SFRS=0; UART_Send_Data(UART0,0x55);
-      Timer0_Delay1ms(5);
+      SFRS=0; 
+      UART_Send_Data(UART0,0x55);
+      Timer0_Delay(FSYSCLK,5,1000);
     }
 
 #elif defined UART0_RXTX_loop

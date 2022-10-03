@@ -1,5 +1,0 @@
-1. Fsys to 9.216M 
-2. UART 115200 test
-3. printf 115200 setting
-4. ISP all
-5.

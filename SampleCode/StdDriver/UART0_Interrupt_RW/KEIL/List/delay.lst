@@ -1,0 +1,565 @@
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DELAY
+OBJECT MODULE PLACED IN .\Output\delay.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\..\..\Library\StdDriver\src\delay.c LARGE OMF2 OPTIMIZE(7,SPEED) B
+                    -ROWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\List\delay.lst) TABS(2)
+                    - OBJECT(.\Output\delay.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* SPDX-License-Identifier: Apache-2.0                                                                    
+             - */
+   4          /* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   5          /*                                                                                                        
+             - */
+   6          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   7          
+   8          #include "MUG51.h"
+   9          
+  10           
+  11          /**
+  12            * @brief Timer0 delay setting 
+  13            * @param[in] u32SYSCLK define Fsys clock value. for example 24000000, use the real Fsys value.
+  14            *                       - \ref 7372800 (use HIRC)
+  15            * @param[in] u8CNT define count time.
+  16            * @param[in] u6DLYUnit define delay time base is us. From 1~10000, the maxima value please not over 1000
+             -0.
+  17            *                       - \ref 1000 (1ms)
+  18            *                       - \ref 100 (100us)
+  19            * @return  None 
+  20            * @note    If use LIRC or LXT as Fsys need adjust this marco.
+  21            * @exmaple :Timer0_Delay(7372800,5,1000);
+  22          */
+  23          void Timer0_Delay(unsigned long u32SYSCLK, unsigned int u16CNT, unsigned int u16DLYUnit)
+  24          {
+  25   1            unsigned char TL0TMP, TH0TMP;
+  26   1      
+  27   1            SFRS = 0;
+  28   1            TIMER0_FSYS_DIV12;                                  //T0M=0, Timer0 Clock = Fsys/12
+  29   1            ENABLE_TIMER0_MODE1;                                   //Timer0 is 16-bit mode
+  30   1            TL0TMP = LOBYTE(65535-((u32SYSCLK/1000000)*u16DLYUnit/12));
+  31   1            TH0TMP = HIBYTE(65535-((u32SYSCLK/1000000)*u16DLYUnit/12));
+  32   1        
+  33   1          while (u16CNT != 0)
+  34   1          {
+  35   2            TL0=TL0TMP;
+  36   2            TH0=TH0TMP;
+  37   2            set_TCON_TR0;                                    //Start Timer0
+  38   2            while (!TF0);                       //Check Timer0 Time-Out Flag
+  39   2            clr_TCON_TF0;
+  40   2            clr_TCON_TR0;                       //Stop Timer0
+  41   2            u16CNT --;
+  42   2          }
+  43   1            TL0  = 0; 
+  44   1            TH0 = 0;
+  45   1      }
+  46          
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 2   
+
+  47          /**
+  48            * @brief Timer1 delay setting 
+  49            * @param[in] u32SYSCLK define Fsys clock value. for example 24000000, use the real Fsys value.
+  50            *                       - \ref 24000000 (use HIRC)
+  51            *                       - \ref 22118400 (use HXT)
+  52            * @param[in] u8CNT define count time.
+  53            * @param[in] u6DLYUnit define delay time base is us. From 1~10000, the maxima value please not over 1000
+             -0.
+  54            *                       - \ref 1000 (1ms)
+  55            *                       - \ref 100 (100us)
+  56            * @return  None
+  57            * @note    If use LIRC or LXT as Fsys need adjust this marco.
+  58            * @exmaple :  Timer1_Delay(7372800,5,1000);
+  59          */
+  60          void Timer1_Delay(unsigned long u32SYSCLK, unsigned int u16CNT, unsigned int u16DLYUnit)
+  61          {
+  62   1          unsigned char TL1TMP,TH1TMP;
+  63   1          
+  64   1          SFRS = 0;
+  65   1          TIMER1_FSYS_DIV12;                                 //T1M=0, Timer1 Clock = Fsys/12
+  66   1          ENABLE_TIMER1_MODE1;                                //Timer1 is 16-bit mode
+  67   1          TL1TMP = LOBYTE(65535-((u32SYSCLK/1000000)*u16DLYUnit)/12);
+  68   1          TH1TMP = HIBYTE(65535-((u32SYSCLK/1000000)*u16DLYUnit)/12);
+  69   1        
+  70   1          while (u16CNT != 0)
+  71   1          {
+  72   2            TL1 = TL1TMP;
+  73   2            TH1 = TH1TMP;
+  74   2            set_TCON_TR1;                                //Start Timer1
+  75   2            while (!TF1);                                //Check Timer1 Time-Out Flag
+  76   2            clr_TCON_TF1;
+  77   2            clr_TCON_TR1;
+  78   2            u16CNT --;
+  79   2          }
+  80   1      }
+  81          
+  82          /**
+  83            * @brief Timer2 delay setting 
+  84            * @param[in] u32SYSCLK define Fsys clock value. for example 24000000, use the real Fsys value.
+  85            *                       - \ref 24000000 (use HIRC)
+  86            *                       - \ref 22118400 (use HXT for example)
+  87            * @param[in] u16TMDIV define timer2 clock devider value from 1\4\16\32\64\128\256\512 detail check datas
+             -heet T2MOD.
+  88            *                       - \ref 512
+  89            * @param[in] u16CNT define total count times.
+  90            * @param[in] u6DLYUnit define delay time base is us. From 1~1000000, please consider the value with devi
+             -der.
+  91            *                       - \ref 1000 (1ms)
+  92            *                       - \ref 100 (100us)
+  93            * @return  None
+  94            * @note    If use LIRC or LXT as Fsys need adjust this marco.
+  95            * @exmaple :  Timer2_Delay(7372800,128,5,1000);
+  96          */
+  97          void Timer2_Delay(unsigned long u32SYSCLK,unsigned int u16TMDIV, unsigned int u16CNT, unsigned long u32DLY
+             -Unit)
+  98          {
+  99   1          unsigned char TL2TMP,TH2TMP;
+ 100   1      
+ 101   1          SFRS = 0;
+ 102   1          switch (u16TMDIV)
+ 103   1          {
+ 104   2            case 1:  T2MOD&=0x8F; break;
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 3   
+
+ 105   2            case 4:  T2MOD&=0x8F;T2MOD|=0x10; break;
+ 106   2            case 16: T2MOD&=0x8F;T2MOD|=0x20; break;
+ 107   2            case 32: T2MOD&=0x8F;T2MOD|=0x30; break;
+ 108   2            case 64: T2MOD&=0x8F;T2MOD|=0x40; break;
+ 109   2            case 128:T2MOD&=0x8F;T2MOD|=0x50; break;
+ 110   2            case 256:T2MOD&=0x8F;T2MOD|=0x60; break;
+ 111   2            case 512:T2MOD&=0x8F;T2MOD|=0x70; break;
+ 112   2          }
+ 113   1      //    clr_T2CON_CMRL2;                                  //Timer 2 as auto-reload mode
+ 114   1      //    set_T2MOD_LDEN;
+ 115   1      //    set_T2MOD_CMPCR;                                  //Timer 2 value is auto-cleared as 0000H when a co
+             -mpare match occurs.
+ 116   1          TL2TMP = LOBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u16TMDIV));
+ 117   1          TH2TMP = HIBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u16TMDIV));
+ 118   1          while (u16CNT != 0)
+ 119   1          {
+ 120   2            clr_T2CON_TF2;
+ 121   2            TL2 = TL2TMP;
+ 122   2            TH2 = TH2TMP;
+ 123   2            set_T2CON_TR2;                                    //Start Timer2
+ 124   2            while (!TF2);                                   //Check Timer2 Time-Out Flag
+ 125   2            clr_T2CON_TR2;                                    //Stop Timer2
+ 126   2            u16CNT --;
+ 127   2          }
+ 128   1      }
+ 129          
+ 130          /**
+ 131            * @brief Timer3 delay setting 
+ 132            * @param[in] u32SYSCLK define Fsys clock value. for example 24000000, use the real Fsys value.
+ 133            *                       - \ref 24000000 (use HIRC)
+ 134            *                       - \ref 22118400 (use HXT for example)
+ 135            * @param[in] u8TMDIV define timer2 clock devider value from 1\2\4\8\16\32\64\128 detail check datasheet 
+             -T3MOD.
+ 136            *                       - \ref 512
+ 137            * @param[in] u16CNT define total count times.
+ 138            * @param[in] u32DLYUnit define delay time base is us. From 1~1000000, please consider the value with dev
+             -ider.
+ 139            *                       - \ref 1000 (1ms)
+ 140            *                       - \ref 100 (100us)
+ 141            * @return  None
+ 142            * @note    If use LIRC or LXT as Fsys need adjust this marco.
+ 143            * @exmaple :  Timer3_Delay(7372800,16,5,1000);
+ 144          */
+ 145          void Timer3_Delay(unsigned long u32SYSCLK,unsigned char u8TMDIV, unsigned int u16CNT, unsigned long u32DLY
+             -Unit)
+ 146          {
+ 147   1          unsigned char TL3TMP,TH3TMP;  
+ 148   1        
+ 149   1          SFRS = 0;
+ 150   1          switch (u8TMDIV)
+ 151   1          {
+ 152   2            case 1:T3CON&=0xF8; break;
+ 153   2            case 2:T3CON&=0xF8;T3CON|=0x01; break;
+ 154   2            case 4:T3CON&=0xF8;T3CON|=0x02; break;
+ 155   2            case 8:T3CON&=0xF8;T3CON|=0x03; break;
+ 156   2            case 16:T3CON&=0xF8;T3CON|=0x04; break;
+ 157   2            case 32:T3CON&=0xF8;T3CON|=0x05; break;
+ 158   2            case 64:T3CON&=0xF8;T3CON|=0x06; break;
+ 159   2            case 128:T3CON&=0xF8;T3CON|=0x07; break;
+ 160   2          }
+ 161   1          TL3TMP = LOBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u8TMDIV));
+ 162   1          TH3TMP = HIBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u8TMDIV));
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 4   
+
+ 163   1          while (u16CNT != 0)
+ 164   1          {
+ 165   2            clr_T3CON_TF3;
+ 166   2            RL3 = TL3TMP;
+ 167   2            RH3 = TH3TMP;
+ 168   2            set_T3CON_TR3;                                    //Trigger Timer3
+ 169   2            while (!(T3CON&SET_BIT4));                        //Check Timer3 Time-Out Flag
+ 170   2            clr_T3CON_TF3;
+ 171   2            clr_T3CON_TR3;                                    //Stop Timer3
+ 172   2            u16CNT --;
+ 173   2          }
+ 174   1      }
+ 175          
+ 176          
+ 177          //********************************************************************************************************
+             -********  
+ 178          //**** Timer Interrupt enable setting  
+ 179          //**** 1. Delay value
+ 180          //**** 2. Define unit
+ 181          //**** For example: Timer3_Delay(5,UNIT_100US) = Delay 100us
+ 182          void Timer_Interrupt_Enable(unsigned char u8TM)
+ 183          {
+ 184   1          switch(u8TM)
+ 185   1          {
+ 186   2            case TIMER0: set_IE_ET0;break;
+ 187   2            case TIMER1: set_IE_ET1;break;
+ 188   2            case TIMER2: set_EIE0_ET2;break;
+ 189   2            case TIMER3: set_EIE1_ET3;break;
+ 190   2          }
+ 191   1      }
+ 192          
+ 193          /* ------------------------------------------------------------------------------*/
+ 194          /* ---  Timer 0  ----------------------------------------------------------------*/
+ 195          /* ------------------------------------------------------------------------------*/
+ 196          void Timer0_Delay1ms(unsigned int u16CNT)
+ 197          {
+ 198   1          unsigned char TLTMP, THTMP;
+ 199   1      
+ 200   1          TIMER0_FSYS_DIV12;                                     //T0M=0, Timer0 Clock = Fsys/12
+ 201   1          ENABLE_TIMER0_MODE1;                                   //Timer0 is 16-bit mode
+ 202   1          TLTMP = LOBYTE(TIMER_DIV12_VALUE_1ms_FOSC_7372800);
+ 203   1          THTMP = HIBYTE(TIMER_DIV12_VALUE_1ms_FOSC_7372800);
+ 204   1        
+ 205   1          while (u16CNT != 0)
+ 206   1          {
+ 207   2            TL0=TLTMP;
+ 208   2            TH0=THTMP;
+ 209   2            set_TCON_TR0;                                    //Start Timer0
+ 210   2            while (!TF0);                       //Check Timer0 Time-Out Flag
+ 211   2            clr_TCON_TF0;
+ 212   2            clr_TCON_TR0;                       //Stop Timer0
+ 213   2            u16CNT --;
+ 214   2          }
+ 215   1            TL0  = 0; 
+ 216   1            TH0 = 0;
+ 217   1      
+ 218   1      }
+ 219          /* ---  Timer 0  --------------------------------------------------------------     */
+ 220          void Timer0_Delay10ms(unsigned int u16CNT)
+ 221          {
+ 222   1          unsigned char TLTMP, THTMP;
+ 223   1        
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 5   
+
+ 224   1          TIMER0_FSYS_DIV12;                                     /*T0M=0, Timer0 Clock = Fsys/12  */
+ 225   1          ENABLE_TIMER0_MODE1;                                   /*Timer0 is 16-bit mode */
+ 226   1          TLTMP = LOBYTE(TIMER_DIV12_VALUE_10ms_FOSC_7372800);
+ 227   1          THTMP = HIBYTE(TIMER_DIV12_VALUE_10ms_FOSC_7372800);
+ 228   1      
+ 229   1          while (u16CNT != 0)
+ 230   1          {
+ 231   2            TL0=TLTMP;
+ 232   2            TH0=THTMP;
+ 233   2            set_TCON_TR0;                                       /*Start Timer0 */
+ 234   2            while (!TF0);                                       /*Check Timer0 Time-Out Flag  */
+ 235   2            clr_TCON_TF0;
+ 236   2            clr_TCON_TR0;                                       /*Stop Timer0 */
+ 237   2            u16CNT --;
+ 238   2          }
+ 239   1            TL0  = 0; 
+ 240   1            TH0 = 0;
+ 241   1      }
+ 242          /* ---  Timer 0  --------------------------------------------------------------     */
+ 243          void Timer0_Delay50ms(unsigned int u16CNT)
+ 244          {
+ 245   1          unsigned char TLTMP, THTMP;
+ 246   1      
+ 247   1          TIMER0_FSYS_DIV12;                                     /*T0M=0, Timer0 Clock = Fsys/12  */
+ 248   1          ENABLE_TIMER0_MODE1;                                   /*Timer0 is 16-bit mode */
+ 249   1          TLTMP = LOBYTE(TIMER_DIV12_VALUE_50ms_FOSC_7372800);
+ 250   1          THTMP = HIBYTE(TIMER_DIV12_VALUE_50ms_FOSC_7372800);
+ 251   1      
+ 252   1          while (u16CNT != 0)
+ 253   1          {
+ 254   2            TL0=TLTMP;
+ 255   2            TH0=THTMP;
+ 256   2            set_TCON_TR0;                                       /*Start Timer0 */
+ 257   2            while (!TF0);                                       /*Check Timer0 Time-Out Flag  */
+ 258   2            clr_TCON_TF0;
+ 259   2            clr_TCON_TR0;                                       /*Stop Timer0 */
+ 260   2            u16CNT --;
+ 261   2          }
+ 262   1            TL0  = 0; 
+ 263   1            TH0 = 0;
+ 264   1      }
+ 265          
+ 266          /* ------------------------------------------------------------------------------*/
+ 267          /* ---  Timer 1  ----------------------------------------------------------------*/
+ 268          /* ------------------------------------------------------------------------------*/
+ 269          void Timer1_Delay1ms(unsigned int u16CNT)
+ 270          {
+ 271   1          unsigned char TLTMP, THTMP;
+ 272   1      
+ 273   1          TIMER1_FSYS_DIV12;                                     /*T1M=0, Timer1 Clock = Fsys/12  */
+ 274   1          ENABLE_TIMER1_MODE1;                                   /*Timer1 is 16-bit mode */
+ 275   1          TLTMP = LOBYTE(TIMER_DIV12_VALUE_1ms_FOSC_7372800);
+ 276   1          THTMP = HIBYTE(TIMER_DIV12_VALUE_1ms_FOSC_7372800);
+ 277   1      
+ 278   1          while (u16CNT != 0)
+ 279   1          {
+ 280   2            TL1=TLTMP;
+ 281   2            TH1=THTMP;
+ 282   2            set_TCON_TR1;                                       /*Start Timer0 */
+ 283   2            while (!TF1);                                       /*Check Timer0 Time-Out Flag  */
+ 284   2            clr_TCON_TF1;
+ 285   2            clr_TCON_TR1;                                       /*Stop Timer0 */
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 6   
+
+ 286   2            u16CNT --;
+ 287   2          }
+ 288   1            TL1 = 0; 
+ 289   1            TH1 = 0;
+ 290   1      }
+ 291          /* ---  Timer 1  --------------------------------------------------------------     */
+ 292          void Timer1_Delay10ms(unsigned int u16CNT)
+ 293          {
+ 294   1          unsigned char TLTMP, THTMP;
+ 295   1      
+ 296   1          TIMER1_FSYS_DIV12;                                     /*T1M=0, Timer1 Clock = Fsys/12  */
+ 297   1          ENABLE_TIMER1_MODE1;                                   /*Timer1 is 16-bit mode */
+ 298   1          TLTMP = LOBYTE(TIMER_DIV12_VALUE_10ms_FOSC_7372800);
+ 299   1          THTMP = HIBYTE(TIMER_DIV12_VALUE_10ms_FOSC_7372800);
+ 300   1      
+ 301   1          while (u16CNT != 0)
+ 302   1          {
+ 303   2            TL1=TLTMP;
+ 304   2            TH1=THTMP;
+ 305   2            set_TCON_TR1;                                       /*Start Timer0 */
+ 306   2            while (!TF1);                                       /*Check Timer0 Time-Out Flag  */
+ 307   2            clr_TCON_TF1;
+ 308   2            clr_TCON_TR1;                                       /*Stop Timer0 */
+ 309   2            u16CNT --;
+ 310   2          }
+ 311   1            TL1 = 0; 
+ 312   1            TH1 = 0;
+ 313   1      }
+ 314          /* ---  Timer 1  --------------------------------------------------------------     */
+ 315          void Timer1_Delay50ms(unsigned int u16CNT)
+ 316          {
+ 317   1          unsigned char TLTMP, THTMP;
+ 318   1      
+ 319   1          TIMER1_FSYS_DIV12;                                     /*T1M=0, Timer1 Clock = Fsys/12  */
+ 320   1          ENABLE_TIMER1_MODE1;                                   /*Timer1 is 16-bit mode */
+ 321   1          TLTMP = LOBYTE(TIMER_DIV12_VALUE_50ms_FOSC_7372800);
+ 322   1          THTMP = HIBYTE(TIMER_DIV12_VALUE_50ms_FOSC_7372800);
+ 323   1      
+ 324   1          while (u16CNT != 0)
+ 325   1          {
+ 326   2            TL1=TLTMP;
+ 327   2            TH1=THTMP;
+ 328   2            set_TCON_TR1;                                       /*Start Timer0 */
+ 329   2            while (!TF1);                                       /*Check Timer0 Time-Out Flag  */
+ 330   2            clr_TCON_TF1;
+ 331   2            clr_TCON_TR1;                                       /*Stop Timer0 */
+ 332   2            u16CNT --;
+ 333   2          }
+ 334   1            TL1 = 0; 
+ 335   1            TH1 = 0;
+ 336   1      }
+ 337          
+ 338          /* ----------------------------------------------------------------- */
+ 339          /* ---  Timer 2  --------------------------------------------------------------     */
+ 340          /* ----------------------------------------------------------------- */
+ 341          void Timer2_Delay1ms(unsigned int u16CNT)
+ 342          {
+ 343   1          unsigned char TLTMP, THTMP;
+ 344   1      
+ 345   1          SFRS = 0;T2MOD&=0x8F;T2MOD|=0x50;                     /* Timer 2 DIV128  */
+ 346   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
+ 347   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 7   
+
+ 348   1      
+ 349   1          while (u16CNT != 0)
+ 350   1          {
+ 351   2              TL2 = TLTMP;
+ 352   2              TH2 = THTMP;
+ 353   2              set_T2CON_TR2;                                    /* Start Timer2 */
+ 354   2              while (!TF2);                                     /* Check Timer2 Time-Out Flag  */
+ 355   2              clr_T2CON_TF2;
+ 356   2              clr_T2CON_TR2;                                    /* Stop Timer2  */
+ 357   2              u16CNT --;
+ 358   2          }
+ 359   1      }
+ 360          /* ---  Timer 2  --------------------------------------------------------------     */
+ 361          void Timer2_Delay10ms(unsigned int u16CNT)
+ 362          {
+ 363   1          unsigned char TLTMP, THTMP;
+ 364   1      
+ 365   1          SFRS = 0;T2MOD&=0x8F;T2MOD|=0x50;                     /* Timer 2 DIV128  */
+ 366   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_10ms_FOSC_7372800);
+ 367   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_10ms_FOSC_7372800);
+ 368   1      
+ 369   1          while (u16CNT != 0)
+ 370   1          {
+ 371   2              TL2 = TLTMP;
+ 372   2              TH2 = THTMP;
+ 373   2              set_T2CON_TR2;                                    /* Start Timer2 */
+ 374   2              while (!TF2);                                     /* Check Timer2 Time-Out Flag  */
+ 375   2              clr_T2CON_TF2;
+ 376   2              clr_T2CON_TR2;                                    /* Stop Timer2  */
+ 377   2              u16CNT --;
+ 378   2          }
+ 379   1      }
+ 380          
+ 381          /* ---  Timer 2  --------------------------------------------------------------     */
+ 382          void Timer2_Delay100ms(unsigned int u16CNT)
+ 383          {
+ 384   1          unsigned char TLTMP, THTMP;
+ 385   1      
+ 386   1          SFRS = 0;T2MOD&=0x8F;T2MOD|=0x50;                     /* Timer 2 DIV128  */
+ 387   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_100ms_FOSC_7372800);
+ 388   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_100ms_FOSC_7372800);
+ 389   1      
+ 390   1          while (u16CNT != 0)
+ 391   1          {
+ 392   2              TL2 = TLTMP;
+ 393   2              TH2 = THTMP;
+ 394   2              set_T2CON_TR2;                                    /* Start Timer2 */
+ 395   2              while (!TF2);                                     /* Check Timer2 Time-Out Flag  */
+ 396   2              clr_T2CON_TF2;
+ 397   2              clr_T2CON_TR2;                                    /* Stop Timer2  */
+ 398   2              u16CNT --;
+ 399   2          }
+ 400   1      }
+ 401          /* ---  Timer 2  --------------------------------------------------------------     */
+ 402          void Timer2_Delay200ms(unsigned int u16CNT)
+ 403          {
+ 404   1          unsigned char TLTMP, THTMP;
+ 405   1      
+ 406   1          SFRS = 0;T2MOD&=0x8F;T2MOD|=0x50;                     /* Timer 2 DIV128  */
+ 407   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_200ms_FOSC_7372800);
+ 408   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_200ms_FOSC_7372800);
+ 409   1      
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 8   
+
+ 410   1          while (u16CNT != 0)
+ 411   1          {
+ 412   2              TL2 = TLTMP;
+ 413   2              TH2 = THTMP;
+ 414   2              set_T2CON_TR2;                                    /* Start Timer2 */
+ 415   2              while (!TF2);                                     /* Check Timer2 Time-Out Flag  */
+ 416   2              clr_T2CON_TF2;
+ 417   2              clr_T2CON_TR2;                                    /* Stop Timer2  */
+ 418   2              u16CNT --;
+ 419   2          }
+ 420   1      }
+ 421          /* ---  Timer 2  --------------------------------------------------------------     */
+ 422          void Timer2_Delay1s(unsigned int u16CNT)
+ 423          {
+ 424   1          unsigned char TLTMP, THTMP;
+ 425   1      
+ 426   1          SFRS = 0;T2MOD&=0x8F;T2MOD|=0x70;                 /* Timer 2 DIV512  */
+ 427   1          TLTMP = LOBYTE(TIMER_DIV512_VALUE_1s_FOSC_7372800);
+ 428   1          THTMP = HIBYTE(TIMER_DIV512_VALUE_1s_FOSC_7372800);
+ 429   1      
+ 430   1          while (u16CNT != 0)
+ 431   1          {
+ 432   2              TL2 = TLTMP;
+ 433   2              TH2 = THTMP;
+ 434   2              set_T2CON_TR2;                                    /* Start Timer2 */
+ 435   2              while (!TF2);                                     /* Check Timer2 Time-Out Flag  */
+ 436   2              clr_T2CON_TF2;
+ 437   2              clr_T2CON_TR2;                                    /* Stop Timer2  */
+ 438   2              u16CNT --;
+ 439   2          }
+ 440   1      }
+ 441          
+ 442          /* ----------------------------------------------------------------- */
+ 443          /* ---  Timer 3  --------------------------------------------------------------     */
+ 444          /* ----------------------------------------------------------------- */
+ 445          void Timer3_Delay500us(unsigned int u16CNT)
+ 446          {
+ 447   1          unsigned char TLTMP, THTMP;
+ 448   1      
+ 449   1          SFRS=0; T3CON = 0x02;                               /* Timer3 Clock = Fsys/4  */
+ 450   1          TLTMP = LOBYTE(TIMER_DIV4_VALUE_500us_FOSC_7372800);
+ 451   1          THTMP = HIBYTE(TIMER_DIV4_VALUE_500us_FOSC_7372800);
+ 452   1      
+ 453   1          while (u16CNT != 0)
+ 454   1          {
+ 455   2              RL3 = TLTMP;
+ 456   2              RH3 = THTMP;
+ 457   2              set_T3CON_TR3;                                  /* Start Timer3 */
+ 458   2              while (!(T3CON&SET_BIT4));                      /* Check Timer3 Time-Out Flag  */
+ 459   2              clr_T3CON_TF3;
+ 460   2              clr_T3CON_TR3;                                      /* Stop Timer3  */
+ 461   2              u16CNT --;
+ 462   2          }
+ 463   1      }
+ 464          /* ---  Timer 3  --------------------------------------------------------------     */
+ 465          void Timer3_Delay1ms(unsigned int u16CNT)
+ 466          {
+ 467   1          unsigned char TLTMP, THTMP;
+ 468   1      
+ 469   1          SFRS=0; T3CON = 0x07;                                       /* Timer3 Clock = Fsys/128  */
+ 470   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
+ 471   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
+C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 9   
+
+ 472   1      
+ 473   1          while (u16CNT != 0)
+ 474   1          {
+ 475   2              RL3 = TLTMP;
+ 476   2              RH3 = THTMP;
+ 477   2              set_T3CON_TR3;                                  /* Start Timer3 */
+ 478   2              while (!(T3CON&SET_BIT4));                      /* Check Timer3 Time-Out Flag  */
+ 479   2              clr_T3CON_TF3;
+ 480   2              clr_T3CON_TR3;                                  /* Stop Timer3  */
+ 481   2              u16CNT --;
+ 482   2          }
+ 483   1      }
+ 484          /* ---  Timer 3  --------------------------------------------------------------     */
+ 485          void Timer3_Delay10ms(unsigned int u16CNT)
+ 486          {
+ 487   1          unsigned char TLTMP, THTMP;
+ 488   1      
+ 489   1          SFRS=0; T3CON = 0x07;                                       /* Timer3 Clock = Fsys/128  */
+ 490   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_10ms_FOSC_7372800);
+ 491   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_10ms_FOSC_7372800);
+ 492   1      
+ 493   1          while (u16CNT != 0)
+ 494   1          {
+ 495   2              RL3 = TLTMP;
+ 496   2              RH3 = THTMP;
+ 497   2              set_T3CON_TR3;                                  /* Start Timer3 */
+ 498   2              while (!(T3CON&SET_BIT4));                      /* Check Timer3 Time-Out Flag  */
+ 499   2              clr_T3CON_TF3;
+ 500   2              clr_T3CON_TR3;                                  /* Stop Timer3  */
+ 501   2              u16CNT --;
+ 502   2          }
+ 503   1      }
+ 504          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1797    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      43
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

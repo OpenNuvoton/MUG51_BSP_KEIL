@@ -41,7 +41,7 @@ void main (void)
  /* Enable UART2 RX */      
     MFP_P55_UART2_RXD;
     P55_INPUT_MODE;
-    UART_Open(7372800,UART2,115200);
+    UART_Open(FSYSCLK,UART2,115200);
   
  /* Clear XRAM base address area to 00h */
     for(ct=0;ct<10;ct++)

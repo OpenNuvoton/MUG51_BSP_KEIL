@@ -19,11 +19,14 @@ unsigned int xdata start_address,u16_addr;
 ************************************************************************************************************/
 void main (void)
 {
-
-  set_CHPCON_IAPEN;  
+  set_CHPCON_IAPEN;
+	
+#ifdef  isp_with_wdt
   TA=0X55;TA=0XAA;WDCON=0x07;
+	#endif
+
 //uart initial for ISP programmer GUI, always use 115200 baudrate
-  UART0_ini_115200_7.3728MHz();
+  UART0_ini_115200_7_3728Hz();
   TM0_ini();
 
   g_timer0Over=0;
@@ -34,7 +37,7 @@ while(1)
 {
         if(bUartDataReady == TRUE)
         {
-          EA=0; //DISABLE ALL INTERRUPT
+          EA=0;
           if(g_programflag==1)
           {
             for(count=8;count<64;count++)
@@ -43,7 +46,7 @@ while(1)
               IAPCN = BYTE_PROGRAM_AP;          //program byte
               IAPAL = flash_address&0xff;
               IAPAH = (flash_address>>8)&0xff;
-              IAPFD=uart_rcvbuf[count];
+              IAPFD = uart_rcvbuf[count];
 #ifdef isp_with_wdt
               set_IAPTRG_IAPGO_WDCLR;
 #else
@@ -53,8 +56,8 @@ while(1)
               IAPCN = BYTE_READ_AP;              //program byte verify
               if(IAPFD!=uart_rcvbuf[count])
               while(1);                          
-              if (CHPCON==0x43)              //if error flag set, program error stop ISP
-              while(1);
+//              if (CHPCON==0x43)              //if error flag set, program error stop ISP
+//              while(1);
               
               g_totalchecksum=g_totalchecksum+uart_rcvbuf[count];
               flash_address++;
@@ -71,7 +74,6 @@ END_2:
             uart_txbuf[8]=g_totalchecksum&0xff;
             uart_txbuf[9]=(g_totalchecksum>>8)&0xff;
             Send_64byte_To_UART0();
-
           }
             
           switch(uart_rcvbuf[0])
@@ -80,7 +82,7 @@ END_2:
             case CMD_SYNC_PACKNO:
             {
               Package_checksum();
-              Send_64byte_To_UART0();    
+              Send_64byte_To_UART0();
               g_timer0Counter=0; //clear timer 0 for no reset
               g_timer0Over=0;
             break;
@@ -89,8 +91,8 @@ END_2:
             case CMD_GET_FWVER:
             {
               Package_checksum();
-              uart_txbuf[8]=FW_VERSION;  
-              Send_64byte_To_UART0();  
+              uart_txbuf[8]=FW_VERSION;
+              Send_64byte_To_UART0();
             break;
             }
             
@@ -105,11 +107,11 @@ END_2:
             {
               READ_ID();
               Package_checksum();
-              uart_txbuf[8]=DID_lowB;  
-              uart_txbuf[9]=DID_highB;  
-              uart_txbuf[10]=PID_lowB;  
-              uart_txbuf[11]=PID_highB;  
-              Send_64byte_To_UART0();  
+              uart_txbuf[8]=DID_lowB;
+              uart_txbuf[9]=DID_highB;
+              uart_txbuf[10]=PID_lowB;
+              uart_txbuf[11]=PID_highB;
+              Send_64byte_To_UART0();
             break;
             }
             case CMD_ERASE_ALL:
@@ -154,7 +156,7 @@ END_2:
               recv_CONF1 = uart_rcvbuf[9];
               recv_CONF2 = uart_rcvbuf[10];
               recv_CONF4 = uart_rcvbuf[12];
-/*Erase CONFIG */              
+/*Erase CONFIG */
 //              set_CHPCON_IAPEN;
               set_IAPUEN_CFUEN;
               IAPCN = PAGE_ERASE_CONFIG;
@@ -264,8 +266,8 @@ END_2:
 
                 if(IAPFD!=uart_rcvbuf[count])
                 while(1);          
-                if (CHPCON==0x43)                //if error flag set, program error stop ISP
-                while(1);
+//                if (CHPCON==0x43)                //if error flag set, program error stop ISP
+//                while(1);
                 
                 g_totalchecksum=g_totalchecksum+uart_rcvbuf[count];
                 flash_address++;

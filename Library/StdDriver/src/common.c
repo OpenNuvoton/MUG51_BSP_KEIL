@@ -34,3 +34,16 @@ void Global_Interrupt(unsigned char u8IntStatus)
 {
     EA = u8IntStatus;
 }
+
+/**
+ * @brief       Power down level Select 
+ * @param       0/1/2
+ * @return      None
+ * @details     Setting power down level.
+ * @Example     PowerDown_Level(1);
+ */
+void PowerDown_Level(unsigned char u8PDLevel)
+{
+    SFRS=3;
+	  PDL = u8PDLevel;
+}

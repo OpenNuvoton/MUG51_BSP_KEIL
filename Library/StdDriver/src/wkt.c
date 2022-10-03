@@ -8,6 +8,7 @@
 
 #include "MUG51.h"
 
+#if 0
 /**
   * @brief WKT delay interrupt initial setting and timer 1 interrupt vector  
   * @param[in] u32SYSCLK define Fsys clock value. for example 8, use the real Fsys value.
@@ -25,6 +26,7 @@ _push_(SFRS);
     clr_WKCON_WKTF;
 _pop_(SFRS);
 }
+#endif 
 
 void WKT_AutoReload_Interrupt_Initial_MS(unsigned char u8WKTCLKSouce, unsigned int u8WKTRLData)
 {
