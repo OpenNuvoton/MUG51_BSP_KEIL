@@ -61,7 +61,6 @@
 #include "lowpower.h"
 #include "pdma.h"
 #include "pinint.h"
-#include "power.h"
 #include "pwm0.h"
 #include "pwm123.h"
 #include "rtc.h"

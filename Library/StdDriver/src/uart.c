@@ -36,7 +36,6 @@ void Enable_P31_UART0_VCOM_38400_printf(void)
     ENABLE_UART0_PRINTF;
 }
 
- #if 0
 /* UART0 interrupt subroutine */
 /**
  * @brief       UART0 interrupt subroutine
@@ -61,7 +60,6 @@ void UART0_ISR(void) interrupt 4
     }
     _pop_(SFRS);
 }
-#endif
 
 /* UART1 interrupt subroutine */
 void UART1_ISR(void) interrupt 15

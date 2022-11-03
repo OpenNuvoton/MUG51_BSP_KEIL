@@ -49,12 +49,12 @@ void main (void)
 /* Setting Multi function pin setting for GPIO toggle */ 
     MFP_P33_IC0;
     P33_INPUT_MODE;                          //Define P33 as IC0 input pin.
-    ENABLE_P33_PULLUP;                       //Since check falling edge enalbe internal pull high function.
+    P33_PULLUP_ENABLE;                       //Since check falling edge enalbe internal pull high function.
     TIMER2_Capture(IC0,IC_GPIO,CAPTURERISING,2);
 
     MFP_P11_IC2;
     P11_INPUT_MODE;                          //Define P11 as IC2 input pin.
-    ENABLE_P11_PULLUP;                       //Since check falling edge enalbe internal pull high function.
+    P11_PULLUP_ENABLE;                       //Since check falling edge enalbe internal pull high function.
     TIMER2_Capture(IC2,IC_GPIO,CAPTUREEITHER,7);;
 
     TIMER2_Capture_Interrupt(Enable);

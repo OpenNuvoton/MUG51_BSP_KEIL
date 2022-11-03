@@ -35,7 +35,7 @@ void main (void)
 //Pleaes always check CONFIG WDT disable first 
 //only when WDT reset disable, WDT use as pure timer
 //--------------------------------------------------------
-    ENABLE_P17_PULLDOWN;
+    P17_PULLDOWN_ENABLE;
     WDT_Open(512);
     WDT_Interrupt(Enable);
     ENABLE_GLOBAL_INTERRUPT;

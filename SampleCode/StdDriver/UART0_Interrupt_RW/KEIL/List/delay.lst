@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 1   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE DELAY
@@ -62,7 +62,7 @@ line level    source
   44   1            TH0 = 0;
   45   1      }
   46          
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 2   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 2   
 
   47          /**
   48            * @brief Timer1 delay setting 
@@ -126,7 +126,7 @@ line level    source
  102   1          switch (u16TMDIV)
  103   1          {
  104   2            case 1:  T2MOD&=0x8F; break;
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 3   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 3   
 
  105   2            case 4:  T2MOD&=0x8F;T2MOD|=0x10; break;
  106   2            case 16: T2MOD&=0x8F;T2MOD|=0x20; break;
@@ -190,7 +190,7 @@ line level    source
  160   2          }
  161   1          TL3TMP = LOBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u8TMDIV));
  162   1          TH3TMP = HIBYTE(65536-((u32SYSCLK/1000000)*u32DLYUnit/u8TMDIV));
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 4   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 4   
 
  163   1          while (u16CNT != 0)
  164   1          {
@@ -254,7 +254,7 @@ line level    source
  221          {
  222   1          unsigned char TLTMP, THTMP;
  223   1        
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 5   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 5   
 
  224   1          TIMER0_FSYS_DIV12;                                     /*T0M=0, Timer0 Clock = Fsys/12  */
  225   1          ENABLE_TIMER0_MODE1;                                   /*Timer0 is 16-bit mode */
@@ -318,7 +318,7 @@ line level    source
  283   2            while (!TF1);                                       /*Check Timer0 Time-Out Flag  */
  284   2            clr_TCON_TF1;
  285   2            clr_TCON_TR1;                                       /*Stop Timer0 */
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 6   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 6   
 
  286   2            u16CNT --;
  287   2          }
@@ -382,7 +382,7 @@ line level    source
  345   1          SFRS = 0;T2MOD&=0x8F;T2MOD|=0x50;                     /* Timer 2 DIV128  */
  346   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
  347   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 7   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 7   
 
  348   1      
  349   1          while (u16CNT != 0)
@@ -446,7 +446,7 @@ line level    source
  407   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_200ms_FOSC_7372800);
  408   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_200ms_FOSC_7372800);
  409   1      
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 8   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 8   
 
  410   1          while (u16CNT != 0)
  411   1          {
@@ -510,7 +510,7 @@ line level    source
  469   1          SFRS=0; T3CON = 0x07;                                       /* Timer3 Clock = Fsys/128  */
  470   1          TLTMP = LOBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
  471   1          THTMP = HIBYTE(TIMER_DIV128_VALUE_1ms_FOSC_7372800);
-C51 COMPILER V9.60.0.0   DELAY                                                             10/03/2022 14:33:42 PAGE 9   
+C51 COMPILER V9.60.0.0   DELAY                                                             10/21/2022 12:09:10 PAGE 9   
 
  472   1      
  473   1          while (u16CNT != 0)

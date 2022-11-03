@@ -26,7 +26,7 @@ void main(void)
 */
     MFP_P46_GPIO;
     P46_INPUT_MODE;
-    ENABLE_P46_PULLUP;
+    P46_PULLUP_ENABLE;
   
     MFP_P03_CLKO;
     P03_QUASI_MODE;

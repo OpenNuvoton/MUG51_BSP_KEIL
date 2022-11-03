@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   UART0_RW                                                          10/03/2022 14:33:42 PAGE 1   
+C51 COMPILER V9.60.0.0   UART0_RW                                                          10/21/2022 12:09:09 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE UART0_RW
@@ -30,8 +30,8 @@ line level    source
   11          #include "MUG51.h"
   12          
   13          
-  14          //#define  UART0_RXTX_loop
-  15          #define  UART0_TX_only
+  14          #define  UART0_RXTX_loop
+  15          //#define  UART0_TX_only
   16          /*********************************************************************************************************
              -***/
   17          /*  Main function                                                                                         
@@ -52,31 +52,31 @@ line level    source
   30   1          ENABLE_GLOBAL_INTERRUPT;                                  /* Global interrupt enable */
   31   1      
   32   1      #if defined UART0_TX_only
-  33   1          while (1)
-  34   1          {
-  35   2            SFRS=0; 
-  36   2            UART_Send_Data(UART0,0x55);
-  37   2            Timer0_Delay(FSYSCLK,5,1000);
-  38   2          }
-  39   1      
-  40   1      #elif defined UART0_RXTX_loop
-              /* while receive data from RXD, send this data to TXD */
-                while(1)
-C51 COMPILER V9.60.0.0   UART0_RW                                                          10/03/2022 14:33:42 PAGE 2   
-
-                {
-                  if (uart0_receive_flag)
+                  while (1)
                   {
-                    uart0_receive_flag = 0;
-                    SFRS=0; UART_Send_Data(UART0,uart0_receive_data);
+                    SFRS=0; 
+                    UART_Send_Data(UART0,0x55);
+                    Timer0_Delay(FSYSCLK,5,1000);
                   }
-                }
-              #endif 
+              
+              #elif defined UART0_RXTX_loop
+  41   1      /* while receive data from RXD, send this data to TXD */
+  42   1        while(1)
+C51 COMPILER V9.60.0.0   UART0_RW                                                          10/21/2022 12:09:09 PAGE 2   
+
+  43   1        {
+  44   2          if (uart0_receive_flag)
+  45   2          {
+  46   3            uart0_receive_flag = 0;
+  47   3            SFRS=0; UART_Send_Data(UART0,uart0_receive_data);
+  48   3          }
+  49   2        }
+  50   1      #endif 
   51   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    107    ----
+   CODE SIZE        =     87    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

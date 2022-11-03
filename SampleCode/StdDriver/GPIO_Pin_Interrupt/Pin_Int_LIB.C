@@ -11,7 +11,7 @@
 #include "MUG51.h"
 
 unsigned char PinIntFlag;
-/* IMPORTANT !! This define for printf code only. Disable this define to reduce code size. */
+
 /******************************************************************************
 Pin interrupt subroutine.
 ******************************************************************************/
@@ -35,17 +35,13 @@ here after stack initialization.
 ******************************************************************************/
 void main (void) 
 {
-  /* UART0 initial setting
-  ** include uart.c in Library for UART initial setting
-  **UART0 define P3.1 TXD multi function setting
-  **/
-  Enable_P31_UART0_VCOM_115200_printf();
-  printf("\n PIT test start!");
-//----------------------------------------------------
-//  P1.3 set as highlevel trig pin interrupt function
-//  otherwise, MCU into idle mode.
-//----------------------------------------------------
+  /* UART0 initial for printf */
+    Enable_P31_UART0_VCOM_115200_printf();
+    printf("\n PIT test start!");
+  /* Disable BOD for power down current */
+    BOD_DISABLE;
 
+  /* PIT initial setting */
     MFP_P17_GPIO;
     MFP_P25_GPIO;
 
@@ -59,10 +55,14 @@ void main (void)
     ENABLE_GLOBAL_INTERRUPT;                // global enable bit
     while(1)
     {
+       set_PCON_PD;
+       _nop_();
+       _nop_();
+
       switch(PinIntFlag)
       {
         case (SET_BIT0): printf("\n PIT0 interrupt!"); PinIntFlag&=CLR_BIT0; break;
-        case (SET_BIT2): printf("\n PIT2 interrupt!"); PinIntFlag&=CLR_BIT2;break;
+        case (SET_BIT2): printf("\n PIT2 interrupt!"); PinIntFlag&=CLR_BIT2; break;
         default: break;
       }
     }

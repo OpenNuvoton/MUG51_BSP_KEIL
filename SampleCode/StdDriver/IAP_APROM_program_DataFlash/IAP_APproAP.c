@@ -34,7 +34,7 @@ void main (void)
     unsigned char count;
 /* Loop while P46 not connect to GND */ 
     MFP_P46_GPIO;
-    ENABLE_P46_PULLUP;
+    P46_PULLUP_ENABLE;
     P46_INPUT_MODE;
     while(P46);
 /* define buffer data */

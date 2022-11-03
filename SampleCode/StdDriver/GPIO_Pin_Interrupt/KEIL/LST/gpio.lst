@@ -1,0 +1,380 @@
+C51 COMPILER V9.60.0.0   GPIO                                                              11/03/2022 13:32:58 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE GPIO
+OBJECT MODULE PLACED IN .\Output\gpio.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ..\..\..\..\Library\StdDriver\src\gpio.c LARGE OMF2 OPTIMIZE(8,SPEED) BR
+                    -OWSE INCDIR(..\..\..\..\Library\Device\Include;..\..\..\..\Library\StdDriver\inc) DEBUG PRINT(.\LST\gpio.lst) TABS(2) OB
+                    -JECT(.\Output\gpio.obj)
+
+line level    source
+
+   1          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   2          /*                                                                                                        
+             - */
+   3          /* SPDX-License-Identifier: Apache-2.0                                                                    
+             - */
+   4          /* Copyright(c) 2022 Nuvoton Technology Corp. All rights reserved.                                        
+             - */
+   5          /*                                                                                                        
+             - */
+   6          /*--------------------------------------------------------------------------------------------------------
+             --*/
+   7          
+   8          #include "MUG51.h"
+   9          
+  10          
+  11           /**
+  12            * @brief GPIO Mode setting
+  13            * @param[in] u8Port Decides the GPIO port number Port0 ~ Port5
+  14            * @param[in] u8Port Decides the GPIO port number Port0 ~ Port5
+  15            *                  - \ref Port 0
+  16            *                  - \ref Port 1
+  17            *                  - \ref Port 2
+  18            *                  - \ref Port 3
+  19            *                  - \ref Port 4
+  20            *                  - \ref Port 5
+  21            * @param[in] u8PinMask Decides  bit of the port (SET_BIT0~SET_BIT7 use "|" to define multi bit).
+  22            *                  - \ref SET_BIT0
+  23            *                  - \ref SET_BIT1
+  24            *                  - \ref SET_BIT2
+  25            *                  - \ref SET_BIT3
+  26            *                  - \ref SET_BIT4
+  27            *                  - \ref SET_BIT5
+  28            *                  - \ref SET_BIT6
+  29            *                  - \ref SET_BIT7
+  30            *                  - \ref SET_BIT0|SET_BIT7
+  31            * @param[in] u8Mode Decides the GPIO mode to select.
+  32            *                  - \ref GPIO_MODE_INPUT
+  33            *                  - \ref GPIO_MODE_PUSHPULL
+  34            *                  - \ref GPIO_MODE_QUASI
+  35            *                  - \ref GPIO_MODE_OPENDRAI
+  36            * @return  None
+  37            * @note Confirm multi function pin is defined as GPIO first. call function_define_ML51.h to define.
+  38            * @exmaple :   GPIO_SetMode(Port1, BIT0|BIT7, GPIO_MODE_QUASI);
+  39            */
+  40          void GPIO_SetMode(unsigned char u8Port, unsigned char u8PinMask, unsigned char u8Mode)
+  41          {
+  42   1          unsigned char u8PnM1, u8PnM2;
+  43   1      
+  44   1          SFRS = 1;
+  45   1          switch(u8Port)
+  46   1          {
+  47   2              case Port0:  u8PnM1 = P0M1;  u8PnM2 = P0M2;  break;
+C51 COMPILER V9.60.0.0   GPIO                                                              11/03/2022 13:32:58 PAGE 2   
+
+  48   2              case Port1:  u8PnM1 = P1M1;  u8PnM2 = P1M2;  break;
+  49   2              case Port2:  u8PnM1 = P2M1;  u8PnM2 = P2M2;  break;
+  50   2              case Port3:  u8PnM1 = P3M1;  u8PnM2 = P3M2;  break;
+  51   2              case Port4:  u8PnM1 = P4M1;  u8PnM2 = P4M2;  break;
+  52   2              case Port5:  u8PnM1 = P5M1;  u8PnM2 = P5M2;  break;
+  53   2      //        case Port6:  u8PnM1 = P6M1;  u8PnM2 = P6M2;  break;
+  54   2          }
+  55   1          switch(u8Mode)
+  56   1          {
+  57   2              case GPIO_MODE_QUASI:
+  58   2                  u8PnM1 &= ~u8PinMask;
+  59   2                  u8PnM2 &= ~u8PinMask;
+  60   2                  break;
+  61   2              case GPIO_MODE_PUSHPULL:
+  62   2                  u8PnM1 &= ~u8PinMask;
+  63   2                  u8PnM2 |= u8PinMask;
+  64   2                  break;
+  65   2              case GPIO_MODE_INPUT:
+  66   2                  u8PnM1 |= u8PinMask; 
+  67   2                  u8PnM2 &= ~u8PinMask;
+  68   2                  break;
+  69   2              case GPIO_MODE_OPENDRAIN:
+  70   2                  u8PnM1 |= u8PinMask;
+  71   2                  u8PnM2 |= u8PinMask;
+  72   2                  break;
+  73   2          }
+  74   1          switch(u8Port)
+  75   1          {
+  76   2              case Port0:  P0M1 = u8PnM1;  P0M2 = u8PnM2;  break;
+  77   2              case Port1:  P1M1 = u8PnM1;  P1M2 = u8PnM2;  break;
+  78   2              case Port2:  P2M1 = u8PnM1;  P2M2 = u8PnM2;  break;
+  79   2              case Port3:  P3M1 = u8PnM1;  P3M2 = u8PnM2;  break;
+  80   2              case Port4:  P4M1 = u8PnM1;  P4M2 = u8PnM2;  break;
+  81   2              case Port5:  P5M1 = u8PnM1;  P5M2 = u8PnM2;  break;
+  82   2          }
+  83   1      }
+  84          
+  85          /**
+  86            * @brief GPIO Pull up or Pull down enable setting
+  87            * @param[in] u8Port Decides the GPIO port number Port0 ~ Port5
+  88            *                  - \ref Port 0
+  89            *                  - \ref Port 1
+  90            *                  - \ref Port 2
+  91            *                  - \ref Port 3
+  92            *                  - \ref Port 4
+  93            *                  - \ref Port 5
+  94            * @param[in] u8PinMask Decides  bit of the port (SET_BIT0~SET_BIT7 use "|" to define multi bit).
+  95            *                  - \ref SET_BIT0
+  96            *                  - \ref SET_BIT1
+  97            *                  - \ref SET_BIT2
+  98            *                  - \ref SET_BIT3
+  99            *                  - \ref SET_BIT4
+ 100            *                  - \ref SET_BIT5
+ 101            *                  - \ref SET_BIT6
+ 102            *                  - \ref SET_BIT7
+ 103            *                  - \ref SET_BIT0|SET_BIT7
+ 104            * @param[in] u8PullMode Decides the GPIO Pull up or pull down (PullUp/PullDown)
+ 105            *                  - \ref PULLUP
+ 106            *                  - \ref PULLDOWN
+ 107            * @return  None
+ 108            * @note none
+ 109            * @exmaple :   GPIO_Pull_Enable(Port1, BIT0|BIT5|BIT7, PullUp);
+C51 COMPILER V9.60.0.0   GPIO                                                              11/03/2022 13:32:58 PAGE 3   
+
+ 110            */
+ 111          void GPIO_Pull_Enable(unsigned char u8Port, unsigned char u8PinMask, unsigned char u8PullMode)
+ 112          {
+ 113   1        SFRS=1;
+ 114   1        switch (u8PullMode)
+ 115   1        {
+ 116   2          case PULLUP:
+ 117   2              switch(u8Port)
+ 118   2              {
+ 119   3                case Port0:  P0UP |= u8PinMask;  break;
+ 120   3                case Port1:  P1UP |= u8PinMask;  break;
+ 121   3                case Port2:  P2UP |= u8PinMask;  break;
+ 122   3                case Port3:  P3UP |= u8PinMask;  break;
+ 123   3                case Port4:  P4UP |= u8PinMask;  break;
+ 124   3                case Port5:  P5UP |= u8PinMask;  break;
+ 125   3              }
+ 126   2          break;
+ 127   2          case PULLDOWN:
+ 128   2              switch(u8Port)
+ 129   2              {
+ 130   3                case Port0:  P0DW |= u8PinMask;  break;
+ 131   3                case Port1:  P1DW |= u8PinMask;  break;
+ 132   3                case Port2:  P2DW |= u8PinMask;  break;
+ 133   3                case Port3:  P3DW |= u8PinMask;  break;
+ 134   3                case Port4:  P4DW |= u8PinMask;  break;
+ 135   3                case Port5:  P5DW |= u8PinMask;  break;
+ 136   3              }
+ 137   2          break;
+ 138   2          }
+ 139   1      }
+ 140          
+ 141          
+ 142           /**
+ 143            * @brief GPIO Pull up or Pull down disable 
+ 144            * @param[in] u8Port Decides the GPIO port number Port0 ~ Port5
+ 145            *                  - \ref Port 0
+ 146            *                  - \ref Port 1
+ 147            *                  - \ref Port 2
+ 148            *                  - \ref Port 3
+ 149            *                  - \ref Port 4
+ 150            *                  - \ref Port 5
+ 151            * @param[in] u8PinMask Decides  bit of the port (SET_BIT0~SET_BIT7 use "|" to define multi bit).
+ 152            *                  - \ref SET_BIT0
+ 153            *                  - \ref SET_BIT1
+ 154            *                  - \ref SET_BIT2
+ 155            *                  - \ref SET_BIT3
+ 156            *                  - \ref SET_BIT4
+ 157            *                  - \ref SET_BIT5
+ 158            *                  - \ref SET_BIT6
+ 159            *                  - \ref SET_BIT7
+ 160            *                  - \ref SET_BIT0|SET_BIT7
+ 161            * @param[in] u8PullMode Decides the GPIO Pull up or pull down (PullUp/PullDown)
+ 162            *                  - \ref PULLUP
+ 163            *                  - \ref PULLDOWN
+ 164            * @return  None
+ 165            * @note none
+ 166            * @exmaple :   GPIO_Pull_Enable(P1,BIT0|BIT5,PullUp);
+ 167            */
+ 168          void GPIO_Pull_Disable(unsigned char u8Port, unsigned char u8PinMask, unsigned char u8PullMode)
+ 169          {
+ 170   1        SFRS=1;
+ 171   1        switch (u8PullMode)
+C51 COMPILER V9.60.0.0   GPIO                                                              11/03/2022 13:32:58 PAGE 4   
+
+ 172   1        {
+ 173   2          case PULLUP:
+ 174   2              switch(u8Port)
+ 175   2              {
+ 176   3                case Port0:  P0UP &= ~u8PinMask;  break;
+ 177   3                case Port1:  P1UP &= ~u8PinMask;  break;
+ 178   3                case Port2:  P2UP &= ~u8PinMask;  break;
+ 179   3                case Port3:  P3UP &= ~u8PinMask;  break;
+ 180   3                case Port4:  P4UP &= ~u8PinMask;  break;
+ 181   3                case Port5:  P5UP &= ~u8PinMask;  break;
+ 182   3              }
+ 183   2          break;
+ 184   2          case PULLDOWN:
+ 185   2              switch(u8Port)
+ 186   2              {
+ 187   3                case Port0:  P0DW &= ~u8PinMask;  break;
+ 188   3                case Port1:  P1DW &= ~u8PinMask;  break;
+ 189   3                case Port2:  P2DW &= ~u8PinMask;  break;
+ 190   3                case Port3:  P3DW &= ~u8PinMask;  break;
+ 191   3                case Port4:  P4DW &= ~u8PinMask;  break;
+ 192   3                case Port5:  P5DW &= ~u8PinMask;  break;
+ 193   3              }
+ 194   2          break;
+ 195   2          }
+ 196   1      }
+ 197          
+ 198           /**
+ 199            * @brief GPIO Schmitt Triggered Input enable / disable. 
+ 200            * @param[in] u8Port Decides the GPIO port number 
+ 201            *                  - \ref Port 0
+ 202            *                  - \ref Port 1
+ 203            *                  - \ref Port 2
+ 204            *                  - \ref Port 3
+ 205            *                  - \ref Port 4
+ 206            *                  - \ref Port 5
+ 207            * @param[in] u8PinMask Decides  bit of the port (SET_BIT0~SET_BIT7 use "|" to define multi bit).
+ 208            *                  - \ref SET_BIT0
+ 209            *                  - \ref SET_BIT1
+ 210            *                  - \ref SET_BIT2
+ 211            *                  - \ref SET_BIT3
+ 212            *                  - \ref SET_BIT4
+ 213            *                  - \ref SET_BIT5
+ 214            *                  - \ref SET_BIT6
+ 215            *                  - \ref SET_BIT7
+ 216            *                  - \ref SET_BIT0|SET_BIT7
+ 217            * @param[in] u8SStauts Decides the GPIO Schmitt Triggered status
+ 218            *                  - \ref Enable
+ 219            *                  - \ref Disable
+ 220            * @return  None
+ 221            * @note none
+ 222            * @exmaple :   GPIO_Pull_Enable(P1,BIT0|BIT5,PullUp);
+ 223            */
+ 224          void GPIO_SchmittTrigger(unsigned char u8Port, unsigned char u8PinMask, unsigned char u8SStauts)
+ 225          {
+ 226   1      _push_(SFRS);
+ 227   1        SFRS=1;
+ 228   1        switch (u8SStauts)
+ 229   1        {
+ 230   2          case Enable:
+ 231   2              switch(u8Port)
+ 232   2              {
+ 233   3                case Port0:  P0S |= u8PinMask;  break;
+C51 COMPILER V9.60.0.0   GPIO                                                              11/03/2022 13:32:58 PAGE 5   
+
+ 234   3                case Port1:  P1S |= u8PinMask;  break;
+ 235   3                case Port2:  P2S |= u8PinMask;  break;
+ 236   3                case Port3:  P3S |= u8PinMask;  break;
+ 237   3                case Port4:  P4S |= u8PinMask;  break;
+ 238   3                case Port5:  P5S |= u8PinMask;  break;
+ 239   3              }
+ 240   2          break;
+ 241   2          case Disable:
+ 242   2              switch(u8Port)
+ 243   2              {
+ 244   3                case Port0:  P0S &= ~u8PinMask;  break;
+ 245   3                case Port1:  P1S &= ~u8PinMask;  break;
+ 246   3                case Port2:  P2S &= ~u8PinMask;  break;
+ 247   3                case Port3:  P3S &= ~u8PinMask;  break;
+ 248   3                case Port4:  P4S &= ~u8PinMask;  break;
+ 249   3                case Port5:  P5S &= ~u8PinMask;  break;
+ 250   3              }
+ 251   2          break;
+ 252   2          }
+ 253   1      _pop_(SFRS);
+ 254   1      }
+ 255          
+ 256           /**
+ 257            * @brief GPIO Slew rate Status enable / disable. 
+ 258            * @param[in] u8Port Decides the GPIO port number 
+ 259            *                  - \ref Port 0
+ 260            *                  - \ref Port 1
+ 261            *                  - \ref Port 2
+ 262            *                  - \ref Port 3
+ 263            *                  - \ref Port 4
+ 264            *                  - \ref Port 5
+ 265            * @param[in] u8PinMask Decides  bit of the port (SET_BIT0~SET_BIT7 use "|" to define multi bit).
+ 266            *                  - \ref SET_BIT0
+ 267            *                  - \ref SET_BIT1
+ 268            *                  - \ref SET_BIT2
+ 269            *                  - \ref SET_BIT3
+ 270            *                  - \ref SET_BIT4
+ 271            *                  - \ref SET_BIT5
+ 272            *                  - \ref SET_BIT6
+ 273            *                  - \ref SET_BIT7
+ 274            *                  - \ref SET_BIT0|SET_BIT7
+ 275            * @param[in] u8SRStauts Decides the GPIO Slew rate status
+ 276            *                  - \ref Enable
+ 277            *                  - \ref Disable
+ 278            * @return  None
+ 279            * @note none
+ 280            * @exmaple :   GPIO_Pull_Enable(P1,BIT0|BIT5,PullUp);
+ 281            */
+ 282          void GPIO_SlewRate(unsigned char u8Port, unsigned char u8PinMask, unsigned char u8SRStauts)
+ 283          {
+ 284   1      _push_(SFRS);
+ 285   1        SFRS=1;
+ 286   1        switch (u8SRStauts)
+ 287   1        {
+ 288   2          case Enable:
+ 289   2              switch(u8Port)
+ 290   2              {
+ 291   3                case Port0:  P0SR |= u8PinMask;  break;
+ 292   3                case Port1:  P1SR |= u8PinMask;  break;
+ 293   3                case Port2:  P2SR |= u8PinMask;  break;
+ 294   3                case Port3:  P3SR |= u8PinMask;  break;
+ 295   3                case Port4:  P4SR |= u8PinMask;  break;
+C51 COMPILER V9.60.0.0   GPIO                                                              11/03/2022 13:32:58 PAGE 6   
+
+ 296   3                case Port5:  P5SR |= u8PinMask;  break;
+ 297   3              }
+ 298   2          break;
+ 299   2          case Disable:
+ 300   2              switch(u8Port)
+ 301   2              {
+ 302   3                case Port0:  P0SR &= ~u8PinMask;  break;
+ 303   3                case Port1:  P1SR &= ~u8PinMask;  break;
+ 304   3                case Port2:  P2SR &= ~u8PinMask;  break;
+ 305   3                case Port3:  P3SR &= ~u8PinMask;  break;
+ 306   3                case Port4:  P4SR &= ~u8PinMask;  break;
+ 307   3                case Port5:  P5SR &= ~u8PinMask;  break;
+ 308   3              }
+ 309   2          break;
+ 310   2          }
+ 311   1      _pop_(SFRS);
+ 312   1      }
+ 313          
+ 314          
+ 315           /**
+ 316            * @brief GPIO auto return setting
+ 317            * @param[in] u8Port Decides the GPIO port number P40/P30/P21/P20)
+ 318            * @param[in] u8RTtime delay timing clock minimum ( 0/1/2/3)
+ 319            * @return  None
+ 320            * @note None.
+ 321            * @exmaple :   GPIO_AutoReturnHigh(Port40,3);
+ 322            */
+ 323          void GPIO_AutoReturnHigh(unsigned char u8Port, unsigned char u8RTtime)
+ 324          {
+ 325   1      _push_(SFRS);
+ 326   1        SFRS=3;
+ 327   1        switch (u8Port)
+ 328   1        {
+ 329   2          case Port40: PRTHCON0|=u8RTtime<<6; break;
+ 330   2          case Port30: PRTHCON0|=u8RTtime<<4; break;
+ 331   2          case Port21: PRTHCON0|=u8RTtime<<2; break;
+ 332   2          case Port20: PRTHCON0|=u8RTtime; break;
+ 333   2        }
+ 334   1      _pop_(SFRS);
+ 335   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    657    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+   EDATA SIZE       =   ----    ----
+   HDATA SIZE       =   ----    ----
+   XDATA CONST SIZE =   ----    ----
+   FAR CONST SIZE   =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

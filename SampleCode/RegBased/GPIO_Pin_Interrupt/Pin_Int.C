@@ -10,26 +10,25 @@
 //***********************************************************************************************************
 #include "MUG51.h"
 
-/* IMPORTANT !! This define for printf code only. Disable this define to reduce code size. */
-//#define print_function 
+unsigned char PinIntFlag;
+
 /******************************************************************************
 Pin interrupt subroutine.
 ******************************************************************************/
 void PinInterrupt_ISR (void) interrupt 7
 {
-    _push_(SFRS);
+_push_(SFRS);
   
     SFRS = 0;
     switch(PIF)
     {
-      case 1: printf("\n PIT0 interrupt!"); break;
-      case 2: printf("\n PIT1 interrupt!"); break;
-      case 3: printf("\n PIT2 interrupt!"); break;
+      case (SET_BIT0): PinIntFlag = SET_BIT0; PIF&=CLR_BIT0; break;
+      case (SET_BIT1): PinIntFlag = SET_BIT1; PIF&=CLR_BIT1; break;
+      case (SET_BIT2): PinIntFlag = SET_BIT2; PIF&=CLR_BIT2; break;
       default: break;
     }
-    PIF = 0; 
   
-    _pop_(SFRS);
+_pop_(SFRS);
 }
 /******************************************************************************
 The main C function.  Program execution starts
@@ -37,26 +36,21 @@ here after stack initialization.
 ******************************************************************************/
 void main (void) 
 {
-#ifdef print_function
-  /* UART0 initial setting
-  ** include uart.c in Library for UART initial setting
-  **UART0 define P3.1 TXD multi function setting
-  **/
-  Enable_P31_UART0_VCOM_115200_printf();
-#endif
+  /* UART0 initial for printf */
+    Enable_P31_UART0_VCOM_115200_printf();
+    printf("\n PIT test start!");
 
-//----------------------------------------------------
-//  P1.3 set as highlevel trig pin interrupt function
-//  otherwise, MCU into idle mode.
-//----------------------------------------------------
+  /* Disable BOD for power down current */
+    BOD_DISABLE;
 
+  /* PIT initial setting */
     MFP_P17_GPIO;
     P17_INPUT_MODE;
-    ENABLE_P17_PULLUP;
+    P17_PULLUP_ENABLE;
 
     MFP_P25_GPIO;
     P25_INPUT_MODE;
-    ENABLE_P25_PULLUP;
+    P25_PULLUP_ENABLE;
     
     MFP_P35_GPIO;
     P35_INPUT_MODE;
@@ -68,7 +62,23 @@ void main (void)
     ENABLE_PIT2_P35_BOTHEDGE;
     ENABLE_PIN_INTERRUPT;                   // Enable pin interrupt
     ENABLE_GLOBAL_INTERRUPT;                // global enable bit
-    while(1);
+
+  /* mail loop in power down and wakeup check flag to print */
+    while(1)
+    {
+       set_PCON_PD;
+       _nop_();
+       _nop_();
+
+      switch(PinIntFlag)
+      {
+        case (SET_BIT0): printf("\n PIT0 interrupt!"); PinIntFlag&=CLR_BIT0; break;
+        case (SET_BIT1): printf("\n PIT1 interrupt!"); PinIntFlag&=CLR_BIT1; break;
+        case (SET_BIT2): printf("\n PIT2 interrupt!"); PinIntFlag&=CLR_BIT2; break;
+        default: break;
+      }
+    }
+
 
 
 }

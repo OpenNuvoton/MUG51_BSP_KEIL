@@ -35,7 +35,7 @@ void main (void)
 /*INT0 ENABLE */
     MFP_P25_INT0;                      //setting INT0 pin P0.6 as Quasi mode
     P25_INPUT_MODE;                    //Set input mode
-    ENABLE_P25_PULLUP;                 //set pull up resistor.
+    P25_PULLUP_ENABLE;                 //set pull up resistor.
     INT0_FALLING_EDGE_TRIG;            //setting trig condition level or edge
     ENABLE_INT0_INTERRUPT;             //INT0_Enable;
     ENABLE_GLOBAL_INTERRUPT;           //Global interrupt enable
@@ -47,7 +47,8 @@ void main (void)
     printf ("\n INT0 interrupt !!");
     _pop_(SFRS);
 #endif
-    while(1);
+
+    while(1);
 }
 
 
